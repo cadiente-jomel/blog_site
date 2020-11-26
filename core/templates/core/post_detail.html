@@ -1,0 +1,529 @@
+{% extends 'core/base.html' %} 
+{% load social_share %}
+{% block content %}
+<div class="user-interaction">
+  <div class="inner-user-interaction">
+    <div class="main-user-interaction">
+      <div class="u-m u-like-container">
+        <form action="{% url 'like-post' post.slug %}" method="POST" class="like-form">
+          <button name="post-slug" value="{{ post.slug }}" class="post-slug heart-btn i-um">
+            {% if request.user in post.likes.all %}
+            <svg aria-label="Unlike" class="_8-yf5 l-um" fill="#ed4956" height="24" viewBox="0 0 48 48" width="24"><path d="M34.6 3.1c-4.5 0-7.9 1.8-10.6 5.6-2.7-3.7-6.1-5.5-10.6-5.5C6 3.1 0 9.6 0 17.6c0 7.3 5.4 12 10.6 16.5.6.5 1.3 1.1 1.9 1.7l2.3 2c4.4 3.9 6.6 5.9 7.6 6.5.5.3 1.1.5 1.6.5s1.1-.2 1.6-.5c1-.6 2.8-2.2 7.8-6.8l2-1.8c.7-.6 1.3-1.2 2-1.7C42.7 29.6 48 25 48 17.6c0-8-6-14.5-13.4-14.5z"></path></svg>
+            {% else %}
+            <svg aria-label="Like" class="_8-yf5 l-um" fill="#75757E" height="24" viewBox="0 0 48 48" width="24"><path d="M34.6 6.1c5.7 0 10.4 5.2 10.4 11.5 0 6.8-5.9 11-11.5 16S25 41.3 24 41.9c-1.1-.7-4.7-4-9.5-8.3-5.7-5-11.5-9.2-11.5-16C3 11.3 7.7 6.1 13.4 6.1c4.2 0 6.5 2 8.1 4.3 1.9 2.6 2.2 3.9 2.5 3.9.3 0 .6-1.3 2.5-3.9 1.6-2.3 3.9-4.3 8.1-4.3m0-3c-4.5 0-7.9 1.8-10.6 5.6-2.7-3.7-6.1-5.5-10.6-5.5C6 3.1 0 9.6 0 17.6c0 7.3 5.4 12 10.6 16.5.6.5 1.3 1.1 1.9 1.7l2.3 2c4.4 3.9 6.6 5.9 7.6 6.5.5.3 1.1.5 1.6.5.6 0 1.1-.2 1.6-.5 1-.6 2.8-2.2 7.8-6.8l2-1.8c.7-.6 1.3-1.2 2-1.7C42.7 29.6 48 25 48 17.6c0-8-6-14.5-13.4-14.5z"></path></svg>
+            {% endif %}
+          </button>
+          <span class="post-count">{{post.likes.all.count}}</span>
+        </form>
+      </div>
+
+      <div class="u-m u-comment-container chat-btn">
+        <span class="i-um"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-chat " fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" d="M2.678 11.894a1 1 0 0 1 .287.801 10.97 10.97 0 0 1-.398 2c1.395-.323 2.247-.697 2.634-.893a1 1 0 0 1 .71-.074A8.06 8.06 0 0 0 8 14c3.996 0 7-2.807 7-6 0-3.192-3.004-6-7-6S1 4.808 1 8c0 1.468.617 2.83 1.678 3.894zm-.493 3.905a21.682 21.682 0 0 1-.713.129c-.2.032-.352-.176-.273-.362a9.68 9.68 0 0 0 .244-.637l.003-.01c.248-.72.45-1.548.524-2.319C.743 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7-3.582 7-8 7a9.06 9.06 0 0 1-2.347-.306c-.52.263-1.639.742-3.468 1.105z"/>
+        </svg></span>
+        <span class="count-comment">{{ post.comment_set.all.count }}</span>
+      </div>
+      <div class="u-m u-share-container">
+        <span class="i-um">
+          <div class="dropdown">
+            <a
+                class="toggle custom-drop"
+                href="#"
+                role="button"
+                id="dropdownMenuLink"
+                data-toggle="dropdown"
+            >
+            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-box-arrow-up" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M3.5 6a.5.5 0 0 0-.5.5v8a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5v-8a.5.5 0 0 0-.5-.5h-2a.5.5 0 0 1 0-1h2A1.5 1.5 0 0 1 14 6.5v8a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 14.5v-8A1.5 1.5 0 0 1 3.5 5h2a.5.5 0 0 1 0 1h-2z"/>
+              <path fill-rule="evenodd" d="M7.646.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 1.707V10.5a.5.5 0 0 1-1 0V1.707L5.354 3.854a.5.5 0 1 1-.708-.708l3-3z"/>
+            </svg>
+            </a>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <!-- <a
+                    class="dropdown-item"
+                    href="#"
+                    >Facebook</a
+                > -->
+                <div class="social-link-container social-fb">
+                    <i class="lni lni-facebook-oval"></i>
+                    {% post_to_facebook post.slug "Facebook" %}
+                </div>
+                <div class="social-link-container social-twitter">
+             
+                      <i class="lni lni-twitter-original"></i>
+
+
+                    {% post_to_twitter post.slug "" "Twitter" %}
+
+                </div>
+                <div class="social-link-container social-reddit">
+                    <i class="lni lni-reddit"></i>
+                    {% post_to_reddit post.slug "" "Reddit"%}
+
+                  
+
+                </div>
+
+            </div>
+        </div>
+          
+
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container mb-5 min-h">
+
+  <div class="container p-size p-bg">
+    
+        <h1 class="d-post-title mb-5">{{post.title}}</h1>
+        <div class="about-user mb-5">
+            {% if post.author.socialaccount_set.all  %}
+            {% for account in post.author.socialaccount_set.all %}
+            <div class="d-author-profile">
+              <div class="d-inner-img mr-2">
+                <img
+                    class="d-author-profile-img"
+                    src="{{account.get_avatar_url}}"
+                    alt=""
+                />
+              </div>
+                <div class="d-author-profile-name">
+                  <div class="d-inner-name">
+                    <span>{{post.author}}</span>
+
+                  </div>
+                  <div class="d-inner-created text-sub">
+                    <span id="date-c"></span>
+                  </div>
+                </div>
+            </div>
+         
+            {% endfor %}
+            {% else %}
+            <div class="d-author-profile">
+              <div class="d-inner-img mr-2">
+                <img
+                    class="d-author-profile-img"
+                    src="{{post.author.profile_img.profile.url}}"
+                    alt=""
+                />
+              </div>
+                <div class="d-author-profile-name">
+                  <div class="d-inner-name">
+                    <span>{{post.author}}</span>
+
+                  </div>
+                  <div class="d-inner-created text-sub">
+                    <span id="date-c"></span>
+                  </div>
+                </div>
+            </div>
+
+
+            {%endif%}
+          </div>
+            
+
+        <div class="post-body">
+          <div class="d-post-image">
+            <!-- <img class="d-post-thumbnail" src="{{post.header.url}}" alt=""> -->
+          </div>
+          <div id="post-body" class="container"></div>
+          <!-- <p>{{ post.body }}</p> -->
+        </div>
+          <div class="user-interaction-bottom">
+            <div class="inner-user-interaction-bottom">
+              <div class="main-user-interaction main-user-interaction-bottom">
+                <div class="like-comment-container like-comment-container-bottom">
+                  <div class="u-m u-m-bottom u-like-container">
+                    <form action="{% url 'like-post' post.slug %}" method="POST" class="like-form">
+                      <button name="post-slug" value="{{ post.slug }}" class="post-slug heart-btn i-um">
+                        {% if request.user in post.likes.all %}
+                        <svg aria-label="Unlike" class="_8-yf5 l-um" fill="#ed4956" height="24" viewBox="0 0 48 48" width="24"><path d="M34.6 3.1c-4.5 0-7.9 1.8-10.6 5.6-2.7-3.7-6.1-5.5-10.6-5.5C6 3.1 0 9.6 0 17.6c0 7.3 5.4 12 10.6 16.5.6.5 1.3 1.1 1.9 1.7l2.3 2c4.4 3.9 6.6 5.9 7.6 6.5.5.3 1.1.5 1.6.5s1.1-.2 1.6-.5c1-.6 2.8-2.2 7.8-6.8l2-1.8c.7-.6 1.3-1.2 2-1.7C42.7 29.6 48 25 48 17.6c0-8-6-14.5-13.4-14.5z"></path></svg>
+                        {% else %}
+                        <svg aria-label="Like" class="_8-yf5 l-um" fill="#75757E" height="24" viewBox="0 0 48 48" width="24"><path d="M34.6 6.1c5.7 0 10.4 5.2 10.4 11.5 0 6.8-5.9 11-11.5 16S25 41.3 24 41.9c-1.1-.7-4.7-4-9.5-8.3-5.7-5-11.5-9.2-11.5-16C3 11.3 7.7 6.1 13.4 6.1c4.2 0 6.5 2 8.1 4.3 1.9 2.6 2.2 3.9 2.5 3.9.3 0 .6-1.3 2.5-3.9 1.6-2.3 3.9-4.3 8.1-4.3m0-3c-4.5 0-7.9 1.8-10.6 5.6-2.7-3.7-6.1-5.5-10.6-5.5C6 3.1 0 9.6 0 17.6c0 7.3 5.4 12 10.6 16.5.6.5 1.3 1.1 1.9 1.7l2.3 2c4.4 3.9 6.6 5.9 7.6 6.5.5.3 1.1.5 1.6.5.6 0 1.1-.2 1.6-.5 1-.6 2.8-2.2 7.8-6.8l2-1.8c.7-.6 1.3-1.2 2-1.7C42.7 29.6 48 25 48 17.6c0-8-6-14.5-13.4-14.5z"></path></svg>
+                        {% endif %}
+                      </button>
+                      <span class="post-count">{{post.likes.all.count}}</span>
+                    </form>
+                  </div>
+            
+                  <div class="u-m u-m-bottom u-comment-container chat-btn">
+                    <span class="i-um"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-chat " fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" d="M2.678 11.894a1 1 0 0 1 .287.801 10.97 10.97 0 0 1-.398 2c1.395-.323 2.247-.697 2.634-.893a1 1 0 0 1 .71-.074A8.06 8.06 0 0 0 8 14c3.996 0 7-2.807 7-6 0-3.192-3.004-6-7-6S1 4.808 1 8c0 1.468.617 2.83 1.678 3.894zm-.493 3.905a21.682 21.682 0 0 1-.713.129c-.2.032-.352-.176-.273-.362a9.68 9.68 0 0 0 .244-.637l.003-.01c.248-.72.45-1.548.524-2.319C.743 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7-3.582 7-8 7a9.06 9.06 0 0 1-2.347-.306c-.52.263-1.639.742-3.468 1.105z"/>
+                    </svg></span>
+                    <span class="count-comment">{{ post.comment_set.all.count }}</span>
+                  </div>
+
+                </div>
+                <div class="share-author-settings ml-auto">
+
+
+                <div class="u-m u-m-bottom u-share-container ">
+                  <span class="i-um">
+                    <div class="dropdown">
+                      <a
+                          class="toggle custom-drop"
+                          href="#"
+                          role="button"
+                          id="dropdownMenuLink"
+                          data-toggle="dropdown"
+                      >
+                      <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-box-arrow-up" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M3.5 6a.5.5 0 0 0-.5.5v8a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5v-8a.5.5 0 0 0-.5-.5h-2a.5.5 0 0 1 0-1h2A1.5 1.5 0 0 1 14 6.5v8a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 14.5v-8A1.5 1.5 0 0 1 3.5 5h2a.5.5 0 0 1 0 1h-2z"/>
+                        <path fill-rule="evenodd" d="M7.646.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 1.707V10.5a.5.5 0 0 1-1 0V1.707L5.354 3.854a.5.5 0 1 1-.708-.708l3-3z"/>
+                      </svg>
+                      </a>
+                      <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                          <div class="social-link-container social-fb">
+                              <i class="lni lni-facebook-oval"></i>
+                              {% post_to_facebook post.slug "Facebook" %}
+                          </div>
+                          <div class="social-link-container social-twitter">
+                                <i class="lni lni-twitter-original"></i>
+                              {% post_to_twitter post.slug "" "Twitter" %}
+                          </div>
+                          <div class="social-link-container social-reddit">
+                              <i class="lni lni-reddit"></i>
+                              {% post_to_reddit post.slug "" "Reddit"%}
+                          </div>
+                      </div>
+                  </div>
+                  </span>
+                  {% if request.user == post.author %}
+                    <div class="dropdown author-settings">
+                        <a
+                            class="toggle custom-drop"
+                            href="#"
+                            role="button"
+                            id="dropdownMenuLink"
+                            data-toggle="dropdown"
+                        >
+                            <svg
+                                width="1em"
+                                height="1em"
+                                viewBox="0 0 16 16"
+                                class="bi bi-three-dots"
+                                fill="currentColor"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    fill-rule="evenodd"
+                                    d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"
+                                />
+                            </svg>
+                        </a>
+            
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <a
+                                class="dropdown-item"
+                                href="{% url 'delete-post' post.slug %}"
+                                >Delete Post</a
+                            >
+                            <a class="dropdown-item" href="{% url 'edit-post' post.slug %}"
+                                >Edit Post</a
+                            >
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>
+
+  <div class="sidebar-container">
+    <div class="inner-sidebar-container">
+    </div>
+        <div class="sidebar">
+          
+          <div class="comment-header-container mb-3">
+            {% if post.comment_set.all.count <= 1 %}
+            <h3 class="c-res">Response ({{post.comment_set.all.count}})</h3>
+            {% else %}
+            <h3 class="c-res">Responses ({{post.comment_set.all.count}})</h3>
+            {% endif %}
+            <svg class="sidebar-close"width="25" height="25" viewBox="0 0 25 25" class="hf"><path d="M18.13 6.11l-5.61 5.61-5.6-5.61-.81.8 5.61 5.61-5.61 5.61.8.8 5.61-5.6 5.61 5.6.8-.8-5.6-5.6 5.6-5.62"></path></svg>
+          </div>
+          <div class="comment-container-main mb-5">
+              <form action="" method="POST" id="comment-form">
+                  <input
+                      type="hidden"
+                      name="u-img"
+                      id="u-img"
+                      value="{{ request.user.profile_img.profile.url}}"
+                  />
+                  <input
+                      type="hidden"
+                      name="p-id"
+                      id="p-id"
+                      value="{{post.id}}"
+                  />
+                  <input
+                      type="hidden"
+                      name="c-user"
+                      id="c-user"
+                      value="{{request.user}}"
+                  />
+                  <textarea name="comment" class="comment-input" id="comment-input" onkeyup="autoGrow(this);" cols="30" rows="10" placeholder="What are your thoughts?"></textarea>
+                  <!-- <input type="text" name="comment" id="comment-input" /> -->
+                  <div class="control-co toggle-c" id="toggle-c">
+                    <span class="cancel-btn">Cancel</span>
+                    <input class="c-add" type="submit" value="Add Comment" />
+      
+                  </div>
+              </form>
+          </div>
+          <div id="comment-main-container">
+          </div>
+        </div>
+  </div>
+    <script>
+        let dateCreated = `{{post.created}}`
+        document.getElementById('date-c').innerText = dateCreated.split(',')[0]
+
+        window.addEventListener('DOMContentLoaded', () => {
+          const postBody = document.getElementById('post-body')
+          let body = JSON.parse("{{post.body|escapejs}}")
+          let blocks = body.blocks
+
+          for (let index = 0; index < blocks.length; index++) {
+            switch(blocks[index].type) {
+              case 'Header':
+                let head = document.createElement(`h${blocks[index].data.level}`)
+                head.classList.add('p-header')
+                head.textContent = blocks[index].data.text
+                postBody.appendChild(head)
+                break;
+              case 'Image':
+                let div = document.createElement('div')
+                let image = document.createElement('img')
+                let caption = document.createElement('h5')
+                caption.classList.add('p-caption')
+                image.src=`${blocks[index].data.file.url}`
+                caption.textContent = blocks[index].data.caption
+                caption.style.textAlign = 'center';
+                image.style.width = '100%';
+                div.appendChild(image)
+                div.appendChild(caption)
+                postBody.appendChild(div)
+                break;
+              case 'List':
+                let list;
+                if (blocks[index].data.style == 'unordered') {
+                  list=document.createElement('ul')
+                } else {
+                  list=document.createElement('ol')
+                }
+                for(const item in blocks[index].data.items) {
+                  let li = document.createElement('li')
+                  li.classList.add('p-list')
+                  li.innerHTML=blocks[index].data.items[item]
+                  list.appendChild(li)
+                }
+                postBody.appendChild(list)
+                break;
+              case 'Raw':
+                let blockquote=document.createElement('blockquote')
+                
+                let code=document.createElement('code')
+                let pre = document.createElement('pre')
+                pre.textContent = blocks[index].data.html
+                pre.style.background = '#131313'
+                pre.style.color = '#dddddd'
+                pre.style.padding = '15px'
+                code.appendChild(pre)
+                postBody.appendChild(code)
+                break;
+              case 'Attaches':
+                let parent = document.createElement('div')
+                let icon = document.createElement('span')
+                let downloadIcon = document.createElement('span')
+                downloadIcon.classList.add('ml-auto')
+                downloadIcon.innerHTML += `<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-download" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path fill-rule="evenodd" d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+  <path fill-rule="evenodd" d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+</svg>`
+                icon.innerHTML += `<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-file-earmark " fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path d="M4 0h5.5v1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h1V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2z"/>
+  <path d="M9.5 3V0L14 4.5h-3A1.5 1.5 0 0 1 9.5 3z"/>
+</svg>`
+                parent.classList.add('p-attaches-parent')
+                let a =document.createElement('a')
+                a.classList.add('p-attaches-link');
+                // let name = document.createElement('h3')
+                // let size = document.createElement('h3')
+                a.href = `${blocks[index].data.file.url}`
+                a.textContent = `${blocks[index].data.file.name}`
+                // name.textContent = blocks[index].data.file.name
+                // size.textContent = blocks[index].data.file.size
+                a.prepend(icon)
+                a.appendChild(downloadIcon)
+                // parent.appendChild(icon)
+                parent.appendChild(a)
+                // parent.appendChild(downloadIcon)
+                // parent.appendChild(name)
+                // parent.appendChild(size)
+                postBody.appendChild(parent)
+                break;
+
+              case 'paragraph':
+                let para = document.createElement('p')
+                para.innerHTML = `${blocks[index].data.text}`
+                postBody.appendChild(para)
+                break;
+              case 'Quote':
+                let quoteContainer = document.createElement('div')
+                quoteContainer.classList.add('p-quote-container')
+                let quote = document.createElement('p')
+                quote.classList.add('p-quote-text')
+                let quoteCaption = document.createElement('small')
+                quoteCaption.classList.add('p-quote-caption')
+                quote.innerHTML = blocks[index].data.text
+                quoteCaption.textContent = blocks[index].data.caption
+                quote.style.textAlign = blocks[index].data.alignment
+                quoteContainer.appendChild(quote)
+                quoteContainer.appendChild(quoteCaption)
+                postBody.appendChild(quoteContainer)
+                break;
+              case 'Table':
+                let table = document.createElement('table')
+                table.classList.add('p-table')
+                for(let i in blocks[index].data.content) {
+                  let tableRow = document.createElement('tr')
+                  tableRow.classList.add('p-row')
+                  blocks[index].data.content[i].forEach((td) => {
+                    let tableData = document.createElement('td')
+                    tableData.classList.add('p-data')
+                    tableData.textContent = td
+                    tableRow.appendChild(tableData)
+                  })
+                  table.appendChild(tableRow)
+                  console.log(table)
+                }
+                postBody.appendChild(table)
+                break;
+              case 'Link':
+                let linkContainer = document.createElement('div')
+                let svgIcon = document.createElement('span')
+                svgIcon.classList.add('link-icon')
+                let linkIcon = `<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-link-45deg" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path d="M4.715 6.542L3.343 7.914a3 3 0 1 0 4.243 4.243l1.828-1.829A3 3 0 0 0 8.586 5.5L8 6.086a1.001 1.001 0 0 0-.154.199 2 2 0 0 1 .861 3.337L6.88 11.45a2 2 0 1 1-2.83-2.83l.793-.792a4.018 4.018 0 0 1-.128-1.287z"/>
+  <path d="M6.586 4.672A3 3 0 0 0 7.414 9.5l.775-.776a2 2 0 0 1-.896-3.346L9.12 3.55a2 2 0 0 1 2.83 2.83l-.793.792c.112.42.155.855.128 1.287l1.372-1.372a3 3 0 0 0-4.243-4.243L6.586 4.672z"/>
+</svg>`
+                svgIcon.innerHTML += linkIcon;
+                linkContainer.classList.add('link-container')
+                // let link = document.createElement('p');
+                let anchor = document.createElement('a');
+                anchor.classList.add('p-anchor')
+                anchor.target = '_blank';
+                // link.textContent = blocks[index].data.link
+                anchor.href = blocks[index].data.link
+                anchor.textContent =  blocks[index].data.link
+                // anchor.appendChild(link)
+                linkContainer.appendChild(svgIcon)
+                linkContainer.appendChild(anchor)
+
+                postBody.appendChild(linkContainer)
+                break;
+              case 'Warning':
+                let warningContainer = document.createElement('div')
+                warningContainer.classList.add('p-warning-container')
+                let warningMessageContainer = document.createElement('div')
+                warningMessageContainer.classList.add('p-warning-m-container')
+                let warningTitleContainer = document.createElement('div')
+                warningTitleContainer.classList.add('p-warning-t-container')
+                let warningSvgIcon = document.createElement('span')
+                
+                warningSvgIcon.innerHTML += `<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-up" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path fill-rule="evenodd" d="M3.204 11L8 5.519 12.796 11H3.204zm-.753-.659l4.796-5.48a1 1 0 0 1 1.506 0l4.796 5.48c.566.647.106 1.659-.753 1.659H3.204a1 1 0 0 1-.753-1.659z"/>
+</svg>`         
+                
+                let warningMessage = document.createElement('p')
+                warningMessage.classList.add('p-warning-message')
+                let warningTitle = document.createElement('p')
+                warningTitle.classList.add('p-warning-title')
+                warningTitle.textContent = blocks[index].data.title
+                warningMessage.textContent = blocks[index].data.message
+                warningMessageContainer.appendChild(warningMessage)
+                warningTitleContainer.appendChild(warningTitle)
+                warningContainer.appendChild(warningTitleContainer)
+                warningTitleContainer.appendChild(warningSvgIcon)
+                warningContainer.appendChild(warningMessageContainer)
+                postBody.appendChild(warningContainer)
+                warningSvgIcon.classList.add('transition-c')
+                warningMessage.classList.add('transition-c')
+                warningTitleContainer.addEventListener('click', () => {
+                  
+                  warningSvgIcon.classList.toggle('caret-icon')
+                  warningMessage.classList.toggle('warning-show')
+                  warningContainer.style.top = '0';
+                  warningContainer.style.display = 'block'
+                })
+                
+                break;
+              case 'Delimiter':
+                let delimeterChar = document.createElement('div')
+                delimeterChar.classList.add('p-delimiter-container')
+                for(let i = 0; i < 3; i++) {
+                  let horizontalLine = document.createElement('hr')
+                  horizontalLine.classList.add('p-delimiter')
+                  delimeterChar.appendChild(horizontalLine)
+                }
+                postBody.appendChild(delimeterChar)
+                break;
+              case 'Checklist':
+                let checkListContainer = document.createElement('div')
+                checkListContainer.classList.add('p-checklist-container')
+                blocks[index].data.items.forEach(checkData => {
+                  
+                let checkListIndividualContainer = document.createElement('div')
+                checkListIndividualContainer.classList.add('p-check-indi')
+                  let checkbox = document.createElement('input')
+                  checkbox.type = 'checkbox'
+                  checkbox.id = 'c'
+                  checkbox.style.display = 'none'
+                  checkbox.checked = checkData.checked
+                  let checkContainer;
+                  let svgCheck;
+                  if(checkData.checked) {
+                    checkContainer = document.createElement('div')
+                    svgCheck = `<svg width="1em" height="1em" viewBox="0 0 16 16" class="mr-2 bi bi-size-color bi-size bi-check-circle-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path fill-rule="evenodd" d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+</svg>`
+                  checkContainer.innerHTML += svgCheck
+                  } else {
+                    checkContainer = document.createElement('div')
+                    svgCheck = `<svg width="1em" height="1em" viewBox="0 0 16 16" class="mr-2 bi bi-size bi-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+</svg>`
+                  checkContainer.innerHTML += svgCheck
+                  }
+                  checkbox.classList.add('p-checkbox')
+                  checkbox.disabled = true
+                  let checkboxLabel = document.createElement('label')
+                  checkboxLabel.classList.add('p-checkbox-label')
+                  checkboxLabel.textContent = checkData.text
+                  checkboxLabel.for = 'c'
+                  
+                  checkListIndividualContainer.appendChild(checkbox)
+                  checkListIndividualContainer.appendChild(checkContainer)
+                  checkListIndividualContainer.appendChild(checkboxLabel)
+                  checkListContainer.appendChild(checkListIndividualContainer)
+                })
+                postBody.appendChild(checkListContainer)
+                  
+                break;
+              default:
+                break;
+            }
+          }
+        })
+    </script>
+    {% endblock content%}

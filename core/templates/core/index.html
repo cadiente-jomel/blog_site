@@ -1,0 +1,107 @@
+{% extends 'core/base.html' %} {% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-8 mr-4 pb-5">
+            {% for p in post %}
+            <div class="post-container">
+                <div class="post-detail">
+                    <!-- about user -->
+                    <div class="about-user-container mb-2">
+                      <div class="prof-u">
+                        {% if p.author.socialaccount_set.all  %}
+                        {% for account in p.author.socialaccount_set.all %}
+                        <img
+                            class="author-profile"
+                            src="{{ account.get_avatar_url }}"
+                            alt=""
+                        />
+                        <div>{{p.author}}</div>
+                     
+                        {% endfor %}
+                        {% else %}
+                        <img
+                            class="author-profile"
+                            src="{{ p.author.profile_img.profile.url }}"
+                            alt=""
+                        />
+                        <div>{{p.author}}</div>
+
+
+                        {%endif%}
+                      </div>
+                        {% if request.user == p.author %}
+                        <div class="dropdown ml-auto author-settings-custom">
+                            <a
+                                class="toggle custom-drop"
+                                href="#"
+                                role="button" 
+                                id="dropdownMenuLink"
+                                data-toggle="dropdown"
+                                
+                            >
+                                <svg
+                                    width="1em"
+                                    height="1em"
+                                    viewBox="0 0 16 16"
+                                    class="bi bi-three-dots"
+                                    fill="currentColor"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <path
+                                        fill-rule="evenodd"
+                                        d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"
+                                    />
+                                </svg>
+                            </a>
+
+                            <div
+                                class="dropdown-menu"
+                                aria-labelledby="dropdownMenuLink"
+                            >
+                                <a
+                                    class="dropdown-item"
+                                    href="{% url 'delete-post' p.slug %}"
+                                    >Delete Post</a
+                                >
+                                <a
+                                    class="dropdown-item"
+                                    href="{% url 'edit-post' p.slug %}"
+                                    >Edit Post</a
+                                >
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <!-- end of about user -->
+                    <!-- post-detail -->
+                    <div class="post-detail-inner">
+                      <div class="title-des">
+                        <a class="post-about" href="{% url 'post-detail' p.slug %}">
+                          <p class="post-title">
+                              {{p.title}}
+                          </p>
+      
+                          <p class="post-snippet text-sub">{{p.snippet}}</p>
+                        </a>
+                        <p class="post-created text-sub">{{p.created}}</p>
+                      </div>
+                    {% if p.header %}
+                    <div class="thumbnail-container ml-auto">
+                      <a href="{% url 'post-detail' p.slug %}">
+                        <img class="header-thumbnail " src="{{ p.header.url }}" alt="" />
+                      </a>
+                    </div>
+                    {% endif %}
+                  </div>
+                    <!-- end of post-detail -->
+                </div>
+               
+                
+            </div>
+
+            {% endfor %}
+        </div>
+        <div class="col-sm">One of three columns</div>
+    </div>
+</div>
+{% endblock content %}

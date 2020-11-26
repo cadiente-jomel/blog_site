@@ -1,0 +1,92 @@
+{% extends 'core/base.html' %}
+{% block content %}
+<div class="container min-h">
+
+<div class="user-profile-container mb-3">
+    
+    {% if user.socialaccount_set.all  %}
+    {% for account in user.socialaccount_set.all %}
+    <div class="profile-img-container">
+        <img class="profile-img" src="{{ account.get_avatar_url }}" alt="">
+    </div>
+    <div class="profile-info-container">
+        <h3>{{user.get_full_name}}</h3>
+        <p>{{user.email}}</p>
+    </div>
+    {% endfor %}
+    {% else %}
+    <div class="    r">
+        <img class="profile-img" src="{{ user.profile_img.profile.url }}" alt="">
+    </div>
+    <div class="profile-info-container">
+        <h3>{{user.username}}</h3>
+        <p>{{user.email}}</p>
+    </div>
+    {%endif%}
+    <a class="edit-profile custom-nav create" href="{% url 'profile-edit' %}">Edit Profile</a>
+</div>
+
+<div class="body-layout">
+    <div class="row">
+        <div class="col-4">
+            <div class="user-activities-container">
+
+                <ul>
+                    <li class="user-activities"><span>
+                        <i class="far fa-newspaper"></i>
+                    </span>
+                    {{post_count}} Post Published</li>
+                    <li class="user-activities"><span>
+                        <i class="far fa-comments"></i>
+                    </span>
+                    {{comment_count}} comments written</li>
+                    <li class="user-activities"><span>
+                        <i class="fas fa-book-reader"></i>
+                    </span>
+                    Reading List</li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-8">
+            {% for list in user.post_set.all %}
+            <div class="post-list-container mb-3">
+                <div class="about-user-container mb-2">
+                    <div class="prof-u">
+                        {% if list.author.socialaccount_set.all  %}
+                        {% for account in list.author.socialaccount_set.all %}
+                        <img class="author-profile" src="{{ account.get_avatar_url }}" alt="">
+                            <div class="about-the-post">
+                                <div>{{list.author}}</div>
+                                
+                                <span>{{ list.created }}</span>
+                            </div>
+                     
+                        {% endfor %}
+                        {% else %}
+                        <img class="author-profile" src="{{ list.author.profile_img.profile.url }}" alt="">
+                        <div class="about-the-post">
+                            <div>{{list.author}}</div>
+                            
+                            <span>{{ list.created }}</span>
+                        </div>
+
+                        {%endif%}
+                    </div>
+                </div>
+            
+                <h5>{{ list.title }}</h5>
+                <div class="reactions">
+                    <div class="count-reactions">
+                        <i class="far fa-heart"></i> 
+                        <span>{{ list.likes.count }} reactions</span>
+                    </div>
+                </div>
+            </div>
+                {% endfor %}
+
+        </div>
+    </div>
+</div>
+</div>
+</div>
+{% endblock content %}
