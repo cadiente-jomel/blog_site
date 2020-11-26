@@ -65,8 +65,8 @@ class Post(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(
         User, on_delete=models.CASCADE,  related_name='profile_img')
-    profile = models.ImageField(
-        'profile image', default='default.jpg', upload_to='profile')
+    profile = models.ImageField('Profile_image',
+                                default='default.jpg', upload_to='profile')
 
     def __str__(self):
         return f'{self.user.username} profile'
@@ -74,8 +74,8 @@ class Profile(models.Model):
     def save(self, *args, **kwargs):
         super().save()
         img = Image.open(self.profile.path)
-        if img.height > 300 or img.width > 300:
-            output_size = (300, 300)
+        if img.height > 96 or img.width > 96:
+            output_size = (96, 96)
             img.thumbnail(output_size)
             img.save(self.profile.path)
 

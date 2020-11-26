@@ -51,6 +51,9 @@ class UserUpdateForm(forms.ModelForm):
 
 
 class ProfilePageForm(forms.ModelForm):
+    profile = forms.ImageField(
+        label='', widget=forms.FileInput, required=False)
+
     class Meta:
         model = Profile
         fields = ['profile']

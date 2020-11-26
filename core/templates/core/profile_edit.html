@@ -1,11 +1,28 @@
 {% extends 'core/base.html' %}
+{% load crispy_forms_tags %}
 {% block content %}
 <div class="container min-h">
-    <form action="" method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{u_form}}
-        {{p_form}}
-        <input type="submit" value="Update Profile">
+    <div class="m-auto p-size">
+
+        <h1>Settings for <a href="">
+            @{{request.user}}
+        </a></h1>
+    </div>
+    <div class="container p-size p-bg">
+        <h3>User</h3>
+        <form action="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{u_form|crispy}}
+            <label for="">Profile image</label>
+            <div class="d-author-profile img-update-container">
+                <img class="d-author-profile-img i-author-profile mr-3" src="{{ request.user.profile_img.profile.url }}" alt="user-profile">
+                {{p_form|crispy}}
+            </div>
+        </div>
+        <div class="p-size m-auto">
+
+            <input class="ustom-nav create login-continue mt-3" type="submit" value="Update Profile">
+        </div>
     </form>
 </div>
 {% endblock content %}

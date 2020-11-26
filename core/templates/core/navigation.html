@@ -36,8 +36,13 @@
           <img src="{{request.user.profile_img.profile.url}}" alt="user profile" class="d-author-profile-img i-author-profile" >
           {% endif %}
         </div>
-        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="{% url 'profile' request.user %}">Profile</a>
+        <div class="dropdown-menu dropdown-menu-right search-toggle" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="{% url 'profile' request.user %}">{{ request.user.get_full_name }}
+            <div>
+              <small>@{{ request.user.username }}</small>
+            </div>
+          </a>
+          <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="{% url 'add-post' %}">Write Post</a>
           <a class="dropdown-item" href="#">Reading List</a>
           <div class="dropdown-divider"></div>

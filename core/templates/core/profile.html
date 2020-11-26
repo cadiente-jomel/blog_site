@@ -7,7 +7,9 @@
     {% if user.socialaccount_set.all  %}
     {% for account in user.socialaccount_set.all %}
     <div class="profile-img-container">
-        <img class="profile-img" src="{{ account.get_avatar_url }}" alt="">
+        <div class="profile-img-size">
+            <img class="profile-img" src="{{ account.get_avatar_url }}" alt="">
+        </div>
     </div>
     <div class="profile-info-container">
         <h3>{{user.get_full_name}}</h3>
@@ -15,8 +17,10 @@
     </div>
     {% endfor %}
     {% else %}
-    <div class="    r">
-        <img class="profile-img" src="{{ user.profile_img.profile.url }}" alt="">
+    <div class="profile-img-container">
+        <div class="profile-img-size">
+            <img class="profile-img" src="{{ user.profile_img.profile.url }}" alt="">
+        </div>
     </div>
     <div class="profile-info-container">
         <h3>{{user.username}}</h3>

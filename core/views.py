@@ -71,31 +71,7 @@ def profilePage(request, user):
     u = User.objects.get(username=user)
     post_count = u.post_set.all().count()
     comment_count = u.comment_user.all().count()
-    # if request.method == 'POST':
-    #     u_form = UserUpdateForm(request.POST, instance=request.user)
-    #     p_form = ProfilePageForm(
-    #         request.POST, request.FILES, instance=request.user.profile)
-    #     if u_form.is_valid() and p_form.is_valid():
-    #         u_form.save()
-    #         p_form.save()
-    #         messages.success(request, 'Your account has successfully updated')
-    #         return redirect('profile')
-    # else:
 
-    #     if not account.signals.user_logged_in:
-    #         u_form = UserUpdateForm(instance=request.user)
-    #         p_form = ProfilePageForm(instance=request.user.profile_img)
-
-    #         context = {
-    #             'u_form': u_form,
-    #             'p_form': p_form
-    #         }
-    #     else:
-    #         u_form = UserUpdateForm(
-    #             instance=request.user)
-    #         context = {
-    #             'u_form': u_form,
-    #         }
     context = {
         'user': u,
         'post_count': post_count,
@@ -106,7 +82,26 @@ def profilePage(request, user):
 
 
 def profileEditPage(request):
-    return render(request, 'core/profile_edit.html')
+    if request.method == 'POST':
+        u_form = UserUpdateForm(request.POST, instance=request.user)
+        p_form = ProfilePageForm(
+            request.POST, request.FILES, instance=request.user.profile_img)
+        if u_form.is_valid() and p_form.is_valid():
+            u_form.save()
+            p_form.save()
+            messages.success(request, 'Your account has successfully updated')
+            return redirect('profile', request.user)
+    else:
+
+        # for account in request.user.socialaccount_set.all():
+        #     avatar = account.get_avatar_url()
+        u_form = UserUpdateForm(instance=request.user)
+        p_form = ProfilePageForm(instance=request.user.profile_img)
+        context = {
+            'u_form': u_form,
+            'p_form': p_form
+        }
+    return render(request, 'core/profile_edit.html', context)
 
 
 def likePost(request, slug):
