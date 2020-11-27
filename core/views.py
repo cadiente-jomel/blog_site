@@ -23,11 +23,6 @@ def indexPage(request):
     return render(request, 'core/index.html', context)
 
 
-# def indexPage(request):
-#     context = {'post': Post.objects.all()}
-#     return render(request, 'core/index.html', context)
-
-
 def postDetail(request, slug):
     post = Post.objects.get(slug=slug)
     context = {

@@ -62,6 +62,11 @@ class Post(models.Model):
         return reverse('post-detail', args=[self.slug])
 
 
+class ReadingList(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    post = models.ManyToManyField(Post, related_name="post_read")
+
+
 class Profile(models.Model):
     user = models.OneToOneField(
         User, on_delete=models.CASCADE,  related_name='profile_img')
