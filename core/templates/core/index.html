@@ -1,9 +1,10 @@
 {% extends 'core/base.html' %} {% block content %}
+{% load static %}
 <div class="container">
     <div class="row">
-        <div class="col-8 mr-4 pb-5">
-            {% for p in post %}
-            <div class="post-container">
+        <div class="col-8 mr-4 pb-5 infinite-container waypoint">
+            {% for p in page_obj %}
+            <div class="post-container infinite-item">
                 <div class="post-detail">
                     <!-- about user -->
                     <div class="about-user-container mb-2">
@@ -81,7 +82,7 @@
                               {{p.title}}
                           </p>
       
-                          <p class="post-snippet text-sub">{{p.snippet}}</p>
+                          <p class="post-snippet text-sub">{{p.snippet|truncatechars:90}}</p>
                         </a>
                         <p class="post-created text-sub">{{p.created}}</p>
                       </div>
@@ -95,13 +96,42 @@
                   </div>
                     <!-- end of post-detail -->
                 </div>
-               
-                
             </div>
 
             {% endfor %}
+            {% if page_obj.has_next %}
+            <a class="infinite-more-link" href="?page={{ page_obj.next_page_number }}"></a>
+            {% endif %}
+            <div class="d-flex justify-content-center" style="display:none;">
+                <div class="loading-container">
+                    <div class="loading"></div>
+                    <div class="loading"></div>
+                    <div class="loading"></div>
+                </div>
+            </div>
         </div>
         <div class="col-sm">One of three columns</div>
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="{% static 'js/jquery.waypoints.min.js' %}"></script>
+<script src="/static/js/infinite.min.js"></script>
+<script>
+    var infinite = new Waypoint.Infinite({
+        element: $('.infinite-container')[0],
+        handler: function(direction) {
+
+    },
+    offset: 'bottom-in-view',
+
+    onBeforePageLoad: function () {
+    $('.loading-container').show();
+    },
+    onAfterPageLoad: function () {
+    $('.loading-container').hide();
+    }
+
+    });
+
+</script>
 {% endblock content %}

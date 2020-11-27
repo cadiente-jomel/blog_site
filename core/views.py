@@ -1,21 +1,31 @@
+from .forms import UserRegisterPage, ProfilePageForm, UserUpdateForm, PostCreationForm
+from django.views.decorators.csrf import requires_csrf_token
+from django.contrib.auth import login, authenticate, logout
+from django.core.files.storage import FileSystemStorage
 from django.shortcuts import render, redirect
+from django.core.paginator import Paginator
+from django.contrib.auth.models import User
+from django.http import JsonResponse
 from django.http import HttpResponse
 from django.contrib import messages
-from django.contrib.auth.models import User
-from django.contrib.auth import login, authenticate, logout
-from .models import Post
-from .forms import UserRegisterPage, ProfilePageForm, UserUpdateForm, PostCreationForm
-# module needed in editorjs
-from django.views.decorators.csrf import requires_csrf_token
-from django.core.files.storage import FileSystemStorage
-from django.http import JsonResponse
 from allauth import account
+from .models import Post
+# module needed in editorjs
 # Create your views here.
 
 
 def indexPage(request):
-    context = {'post': Post.objects.all()}
+    queryset_list = Post.objects.all()
+    paginator = Paginator(queryset_list, 5)
+    page_number = request.GET.get('page')
+    queryset = paginator.get_page(page_number)
+    context = {'page_obj': queryset}
     return render(request, 'core/index.html', context)
+
+
+# def indexPage(request):
+#     context = {'post': Post.objects.all()}
+#     return render(request, 'core/index.html', context)
 
 
 def postDetail(request, slug):
