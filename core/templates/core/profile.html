@@ -56,34 +56,25 @@
             <div class="post-list-container mb-3">
                 <div class="about-user-container mb-2">
                     <div class="prof-u">
-                        {% if list.author.socialaccount_set.all  %}
-                        {% for account in list.author.socialaccount_set.all %}
-                        <img class="author-profile" src="{{ account.get_avatar_url }}" alt="">
-                            <div class="about-the-post">
-                                <div>{{list.author}}</div>
-                                
-                                <span>{{ list.created }}</span>
-                            </div>
-                     
-                        {% endfor %}
-                        {% else %}
                         <img class="author-profile" src="{{ list.author.profile_img.profile.url }}" alt="">
                         <div class="about-the-post">
-                            <div>{{list.author}}</div>
-                            
-                            <span>{{ list.created }}</span>
+                            <a class="post-about" href="{% url 'post-detail' list.slug %}">
+                                <h5>{{ list.title }}</h5>
+                            </a>
                         </div>
-
-                        {%endif%}
                     </div>
                 </div>
-            
-                <h5>{{ list.title }}</h5>
+                
                 <div class="reactions">
-                    <div class="count-reactions">
+                    <div class="mr-1">{{list.author}}</div>
+
+                    <span class="divider-circle ml-1 mr-1"> • </span>
+                    <div class="count-reactions mr-1 ml-1">
                         <i class="far fa-heart"></i> 
                         <span>{{ list.likes.count }} reactions</span>
                     </div>
+                    <span class="divider-circle ml-1 mr-1"> • </span>
+                    <span class="ml-1" id="date-c">{{ list.created }}</span>
                 </div>
             </div>
                 {% endfor %}
@@ -93,4 +84,12 @@
 </div>
 </div>
 </div>
+<script>
+    let dateContainer = document.querySelectorAll('#date-c')
+    dateContainer.forEach(date => {
+        let curr = date.textContent
+        date.textContent = curr.split(',')[0]
+    })
+
+</script>
 {% endblock content %}

@@ -1,0 +1,50 @@
+{% extends 'core/base.html' %}
+{% block content %}
+    <div class="container min-h ">
+        {% if read_obj.post.all  %}
+        <h3 class="mb-3">Reading List ({{read_obj.post.all.count}})</h3>
+        {% for data in read_obj.post.all %}
+        <div class="post-list-container mb-3">
+            <div class="about-user-container mb-2">
+                <div class="prof-u">
+                   
+                    <img class="author-profile" src="{{ data.author.profile_img.profile.url }}" alt="">
+                    <div class="about-the-post">
+                        <a class="post-about" href="{% url 'post-detail' data.slug %}">
+                            <h5>{{ data.title }}</h5>
+                            </a>
+                       
+                        
+                       
+                    </div>
+                </div>
+            </div>
+
+            <div class="reactions">
+                <div class="mr-1">{{data.author}}</div>
+                <span class="divider-circle ml-1 mr-1"> • </span>
+                <div class="count-reactions mr-1 ml-1">
+                    <i class="far fa-heart"></i> 
+                    <span>{{ data.likes.count }} reactions</span>    
+                </div>
+                <span class="divider-circle mr-1 ml-1"> • </span>
+                <span class="ml-1" id="date-c">{{ data.created}}</span>
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <h3 class="mb-3">Reading List (0)</h3>
+        <div class="read-box">
+            <h3>Your reading list is empty...</h3>
+        </div>
+        {% endif %}
+    </div>
+    <script>
+        let dateContainer = document.querySelectorAll('#date-c')
+        dateContainer.forEach(date => {
+            let curr = date.textContent
+            date.textContent = curr.split(',')[0]
+        })
+
+    </script>
+{% endblock content %}

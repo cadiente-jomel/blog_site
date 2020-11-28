@@ -23,6 +23,24 @@
         </svg></span>
         <span class="count-comment">{{ post.comment_set.all.count }}</span>
       </div>
+
+      <div class="u-m u-readlist-container">
+        <span class="i-um">
+          <form method="POST" action="{% url 'reading-add' post.slug%}" class="book-form">
+            {% csrf_token %}
+            <button class="bookmark-btn post-book">
+              {% if post in reading_obj.post.all %}
+                <i class="fas fa-bookmark"></i>
+              {% else %}
+                <i class="far fa-bookmark"></i>
+              {% endif %}
+            </button>
+
+          </form>
+        </span>
+      </div>
+
+
       <div class="u-m u-share-container">
         <span class="i-um">
           <div class="dropdown">
@@ -38,7 +56,7 @@
               <path fill-rule="evenodd" d="M7.646.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 1.707V10.5a.5.5 0 0 1-1 0V1.707L5.354 3.854a.5.5 0 1 1-.708-.708l3-3z"/>
             </svg>
             </a>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+            <div class="dropdown-menu search-toggle" aria-labelledby="dropdownMenuLink">
                 <!-- <a
                     class="dropdown-item"
                     href="#"
@@ -158,6 +176,7 @@
                   </div>
 
                 </div>
+                
                 <div class="share-author-settings ml-auto">
 
 
@@ -176,7 +195,7 @@
                         <path fill-rule="evenodd" d="M7.646.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 1.707V10.5a.5.5 0 0 1-1 0V1.707L5.354 3.854a.5.5 0 1 1-.708-.708l3-3z"/>
                       </svg>
                       </a>
-                      <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                      <div class="dropdown-menu search-toggle" aria-labelledby="dropdownMenuLink">
                           <div class="social-link-container social-fb">
                               <i class="lni lni-facebook-oval"></i>
                               {% post_to_facebook post.slug "Facebook" %}
@@ -191,6 +210,23 @@
                           </div>
                       </div>
                   </div>
+                  </span>
+                  <span class="i-um">
+                    <div class="u-m-bottom u-readlist-container">
+
+                        <form method="POST" action="{% url 'reading-add' post.slug%}" class="book-form">
+                          {% csrf_token %}
+                          <button class="bookmark-btn post-book">
+                            {% if post in reading_obj.post.all %}
+                              <i class="fas fa-bookmark"></i>
+                            {% else %}
+                              <i class="far fa-bookmark"></i>
+                            {% endif %}
+                          </button>
+              
+                        </form>
+
+                    </div>
                   </span>
                   {% if request.user == post.author %}
                     <div class="dropdown author-settings">
@@ -216,7 +252,7 @@
                             </svg>
                         </a>
             
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <div class="dropdown-menu search-toggle" aria-labelledby="dropdownMenuLink">
                             <a
                                 class="dropdown-item"
                                 href="{% url 'delete-post' post.slug %}"

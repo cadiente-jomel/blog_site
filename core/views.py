@@ -9,7 +9,7 @@ from django.http import JsonResponse
 from django.http import HttpResponse
 from django.contrib import messages
 from allauth import account
-from .models import Post
+from .models import Post, ReadingList
 # module needed in editorjs
 # Create your views here.
 
@@ -25,7 +25,12 @@ def indexPage(request):
 
 def postDetail(request, slug):
     post = Post.objects.get(slug=slug)
+    try:
+        reading_obj = ReadingList.objects.get(post=post)
+    except:
+        reading_obj = False
     context = {
+        'reading_obj': reading_obj,
         'post': post
     }
 
@@ -130,6 +135,47 @@ def likePost(request, slug):
         }
 
         return JsonResponse(data, safe=False)
+
+
+def readingListPost(request):
+    curr_user = User.objects.get(username=request.user)
+    try:
+        read_obj = ReadingList.objects.get(user=curr_user)
+    except:
+        read_obj = False
+    context = {
+        'read_obj': read_obj
+    }
+
+    return render(request, 'core/reading_list.html', context)
+
+
+def readingListAdd(request, slug):
+    user = request.user
+
+    if request.method == 'POST':
+        post_obj = Post.objects.get(slug=slug)
+        curr_user = User.objects.get(username=user)
+        try:
+            read_obj = ReadingList.objects.get(user=curr_user)
+        except:
+            reading_create = ReadingList.objects.create(user=curr_user)
+            reading_create.post.add(post_obj)
+            reading_create.save()
+            return JsonResponse({}, safe=False)
+
+        if post_obj in read_obj.post.all():
+            read_obj.post.remove(post_obj)
+            is_True = False
+        else:
+            read_obj.post.add(post_obj)
+            is_True = True
+
+        data = {
+            'isBookMarked': is_True
+        }
+
+        return JsonResponse(data, safe=True)
 
 
 def addPost(request):

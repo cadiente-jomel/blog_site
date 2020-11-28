@@ -66,6 +66,9 @@ class ReadingList(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ManyToManyField(Post, related_name="post_read")
 
+    def __str__(self):
+        return f'{self.user} reading list'
+
 
 class Profile(models.Model):
     user = models.OneToOneField(
