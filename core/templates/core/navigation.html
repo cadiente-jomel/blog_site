@@ -3,9 +3,9 @@
 
 
     <a class="navbar-brand-custom" href="{% url 'index' %}">DEV</a>
-    <form class="form-inline my-2 my-lg-0 mr-auto">
+    <form method="GET" action="{% url 'post-search' %}" class="form-inline my-2 my-lg-0 mr-auto">
       <div class="search-container">
-        <input class="form-control mr-sm-2" type="search" placeholder="Search..." aria-label="Search">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search..." name="q" aria-label="Search">
       </div>
     </form>
     <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">

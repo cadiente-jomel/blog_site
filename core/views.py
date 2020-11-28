@@ -6,6 +6,7 @@ from django.shortcuts import render, redirect
 from django.core.paginator import Paginator
 from django.contrib.auth.models import User
 from django.http import JsonResponse
+from django.db.models import Q
 from django.http import HttpResponse
 from django.contrib import messages
 from allauth import account
@@ -15,12 +16,41 @@ from .models import Post, ReadingList
 
 
 def indexPage(request):
+    context = {}
     queryset_list = Post.objects.all()
     paginator = Paginator(queryset_list, 5)
     page_number = request.GET.get('page')
     queryset = paginator.get_page(page_number)
-    context = {'page_obj': queryset}
+
+    context['page_obj'] = queryset
+
     return render(request, 'core/index.html', context)
+
+
+def searchPost(request):
+    context = {}
+    query = ''
+    if request.method == 'GET':
+        query = request.GET['q']
+    blog_posts = get_blog_queryset(query)
+    print('SEARCH RESULT', blog_posts)
+    print('SEARCH QUERY', query)
+    context['blog_posts'] = blog_posts
+    return render(request, 'core/search_result.html', context)
+
+
+def get_blog_queryset(query=None):  # this will be used in search
+    queries = query.split(' ')
+    for q in queries:
+        posts = Post.objects.filter(
+            Q(title__icontains=q),
+            Q(body__icontains=q),
+            Q(snippet__icontains=q),
+        ).distinct()
+
+    queryset = [post for post in posts]
+
+    return list(set(queryset))
 
 
 def postDetail(request, slug):

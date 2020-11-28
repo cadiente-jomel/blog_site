@@ -1,0 +1,46 @@
+{% extends 'core/base.html' %}
+{% block content %}
+<div class="container min-h">
+
+    <h3 class="mb-3">Search Result: </h3>
+    
+    {% if blog_posts %}
+    {% for post in blog_posts %}
+    <div class="post-list-container mb-3">
+        <div class="about-user-container mb-2">
+            <div class="prof-u">
+               
+                <img class="author-profile" src="{{ post.author.profile_img.profile.url }}" alt="">
+                <div class="about-the-post">
+                    <a class="post-about" href="{% url 'post-detail' post.slug %}">
+                        <h5>{{ post.title }}</h5>
+                        </a>
+                   
+                    
+                   
+                </div>
+            </div>
+        </div>
+
+        <div class="reactions">
+            <div class="mr-1">{{post.author}}</div>
+            <span class="divider-circle ml-1 mr-1"> • </span>
+            <div class="count-reactions mr-1 ml-1">
+                <i class="far fa-heart"></i> 
+                <span>{{ post.likes.count }} reactions</span>    
+            </div>
+            <span class="divider-circle mr-1 ml-1"> • </span>
+            <span class="ml-1" id="date-c">{{ post.created}}</span>
+        </div>
+    </div>
+</div>
+    {% endfor %}
+    {% endif %}
+    <script>
+        let dateContainer = document.querySelectorAll('#date-c')
+        dateContainer.forEach(date => {
+            let curr = date.textContent
+            date.textContent = curr.split(',')[0]
+        })
+    </script>
+{% endblock content %}
