@@ -33,8 +33,7 @@ def searchPost(request):
     if request.method == 'GET':
         query = request.GET['q']
     blog_posts = get_blog_queryset(query)
-    print('SEARCH RESULT', blog_posts)
-    print('SEARCH QUERY', query)
+    print('data to be serve', blog_posts)
     context['blog_posts'] = blog_posts
     return render(request, 'core/search_result.html', context)
 
@@ -47,8 +46,9 @@ def get_blog_queryset(query=None):  # this will be used in search
             Q(body__icontains=q),
             Q(snippet__icontains=q),
         ).distinct()
-
+    print('found posts', posts)
     queryset = [post for post in posts]
+    print('queryset to be pass', queryset)
 
     return list(set(queryset))
 
