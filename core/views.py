@@ -2,7 +2,7 @@ from .forms import UserRegisterPage, ProfilePageForm, UserUpdateForm, PostCreati
 from django.views.decorators.csrf import requires_csrf_token
 from django.contrib.auth import login, authenticate, logout
 from django.core.files.storage import FileSystemStorage
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator
 from django.contrib.auth.models import User
 from django.http import JsonResponse
@@ -10,12 +10,30 @@ from django.db.models import Q
 from django.http import HttpResponse
 from django.contrib import messages
 from allauth import account
+from .decorators import unauthenticated_user
 from .models import Post, ReadingList
+from taggit.models import Tag
 # module needed in editorjs
 # Create your views here.
 
 
+def get_tag_list():
+    return Post.tags.most_common()[:4]
+
+
+def tagged(request, slug):
+    tag = get_object_or_404(Tag, slug=slug)
+    posts = Post.objects.filter(tags=tag)
+    context = {
+        'tag': tag,
+        'posts': posts,
+    }
+    return render(request, 'core/tagged_post.html', context)
+
+
 def indexPage(request):
+    curr_user = User.objects.get(username=request.user)
+    reading_obj = ReadingList.objects.get(user=curr_user)
     context = {}
     queryset_list = Post.objects.all()
     paginator = Paginator(queryset_list, 5)
@@ -23,6 +41,9 @@ def indexPage(request):
     queryset = paginator.get_page(page_number)
 
     context['page_obj'] = queryset
+    context['common_tags'] = get_tag_list()
+    print('reading list', type(reading_obj))
+    context['reading_obj'] = reading_obj
 
     return render(request, 'core/index.html', context)
 
@@ -98,6 +119,7 @@ def postDetail(request, slug):
 #                 messages.info(request, 'You entered invalid credentials')
 #     return render(request, 'core/login.html')
 
+
 def logoutConfirm(request):
     return render(request, 'account/logout.html')
 
@@ -121,6 +143,7 @@ def profilePage(request, user):
     return render(request, 'core/profile.html', context)
 
 
+@unauthenticated_user
 def profileEditPage(request):
     if request.method == 'POST':
         u_form = UserUpdateForm(request.POST, instance=request.user)
@@ -213,8 +236,9 @@ def addPost(request):
     if request.method == 'POST':
         form = PostCreationForm(request.POST, request.FILES)
         if form.is_valid():
-            form.instance.author = request.user
-            form.save()
+            obj = form.save(commit=False)
+            obj.instance.author = request.user
+            obj.save_m2m()
             return redirect('index')
     context = {
         'forms': form

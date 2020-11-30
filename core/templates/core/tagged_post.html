@@ -1,0 +1,40 @@
+{% extends 'core/base.html' %}
+{% block content %}
+<div class="container-fluid pt-2 ">
+    <div class="container tag-container b-shadow mb-3">
+        <h2 class="tag-title"><span class="mr-1">#</span>{{tag}}</h2>
+    </div>
+</div>
+<div class="container min-h ">
+
+    {% for post in posts %}
+    <div class="post-list-container mb-3">
+        <div class="about-user-container mb-2">
+            <div class="prof-u">
+               
+                <img class="author-profile" src="{{ post.author.profile_img.profile.url }}" alt="">
+                <div class="about-the-post">
+                    <a class="post-about" href="{% url 'post-detail' post.slug %}">
+                        <h5>{{ post.title }}</h5>
+                        </a>
+                   
+                    
+                   
+                </div>
+            </div>
+        </div>
+
+        <div class="reactions">
+            <div class="mr-1">{{post.author}}</div>
+            <span class="divider-circle ml-1 mr-1"> • </span>
+            <div class="count-reactions mr-1 ml-1">
+                <i class="far fa-heart"></i> 
+                <span>{{ post.likes.count }} reactions</span>    
+            </div>
+            <span class="divider-circle mr-1 ml-1"> • </span>
+            <span class="ml-1" id="date-c">{{ post.created}}</span>
+        </div>
+    </div>
+    {% endfor %}
+    </div>
+{% endblock content %}

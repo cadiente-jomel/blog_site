@@ -1,10 +1,10 @@
 {% extends 'core/base.html' %} {% block content %}
 {% load static %}
-<div class="container">
+<div class="container pt-4">
     <div class="row">
         <div class="col-8 mr-4 pb-5 infinite-container waypoint">
             {% for p in page_obj %}
-            <div class="post-container infinite-item">
+            <div class="post-container infinite-item b-shadow">
                 <div class="post-detail">
                     <!-- about user -->
                     <div class="about-user-container mb-2">
@@ -81,10 +81,33 @@
                           <p class="post-title">
                               {{p.title}}
                           </p>
+                        <div class="list-tag">
+                            {% for tag in p.tags.all %}
+                              <a href="{% url 'tagged' tag.slug %}"><span>#</span>{{tag}}</a>
+                            {% endfor %}
+                        </div>
       
                           <p class="post-snippet text-sub">{{p.snippet|truncatechars:90}}</p>
                         </a>
-                        <p class="post-created text-sub">{{p.created}}</p>
+                        <div class="post-bottom-part">
+                            <p class="post-created text-sub " id="date-c">{{p.created}}</p>
+                            <div class="u-m-bottom u-readlist-container ml-auto">
+
+                                <form method="POST" action="{% url 'reading-add' p.slug%}" class="book-form">
+                                  {% csrf_token %}
+                                  <button class="bookmark-btn post-book">
+                                    {% if p in reading_obj.post.all %}
+                                      <i class="fas fa-bookmark"></i>
+                                    {% else %}
+                                      <i class="far fa-bookmark"></i>
+                                    {% endif %}
+                                  </button>
+                      
+                                </form>
+        
+                            </div>
+                        </div>
+                        
                       </div>
                     {% if p.header %}
                     <div class="thumbnail-container ml-auto">

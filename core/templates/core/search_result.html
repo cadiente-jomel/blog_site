@@ -1,9 +1,9 @@
-{% extends 'core/base.html' %} {% block content %}
-
-<div class="container min-h">
+{% extends 'core/base.html' %} 
+{% block content %}
+<div class="container min-h pt-4">
     <h3 class="mb-3">Search Result:</h3>
     {% if blog_posts %} {% for post in blog_posts %}
-    <div class="post-list-container mb-3">
+    <div class="post-list-container mb-3 b-shadow">
         <div class="about-user-container mb-2">
             <div class="prof-u">
                 <img
@@ -34,13 +34,20 @@
         </div>
     </div>
     {% endfor %} 
+    {% else %}
+    <div class="min-h">
+        <div class="read-box">
+            <h3>No result found...</h3>
+        </div>
+
+    </div>
+    {% endif %}
+    <script>
+        let dateContainer = document.querySelectorAll('#date-c');
+        dateContainer.forEach((date) => {
+            let curr = date.textContent;
+            date.textContent = curr.split(',')[0];
+        });
+    </script>
 </div>
-{% endif %}
-<script>
-    let dateContainer = document.querySelectorAll('#date-c');
-    dateContainer.forEach((date) => {
-        let curr = date.textContent;
-        date.textContent = curr.split(',')[0];
-    });
-</script>
-{% endblock content %}
+    {% endblock content %}

@@ -1,11 +1,11 @@
-<nav class="navbar navbar-expand-lg navbar-dark-custom bg-dark-custom mb-5">
+<nav class="navbar navbar-expand-lg navbar-dark-custom bg-dark-custom">
     <div class="container">
 
 
     <a class="navbar-brand-custom" href="{% url 'index' %}">DEV</a>
     <form method="GET" action="{% url 'post-search' %}" class="form-inline my-2 my-lg-0 mr-auto">
       <div class="search-container">
-        <input class="form-control mr-sm-2" type="search" placeholder="Search..." name="q" aria-label="Search">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search..." name="q" aria-label="Search" autocomplete="off">
       </div>
     </form>
     <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,8 +43,10 @@
             </div>
           </a>
           <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#">Dashboard</a>
           <a class="dropdown-item" href="{% url 'add-post' %}">Write Post</a>
           <a class="dropdown-item" href="{% url 'reading-list' %}">Reading List</a>
+          <a class="dropdown-item" href="{% url 'profile-edit' %}">Settings</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="{% url 'account_confirm' %}">Logout</a>
         </div>

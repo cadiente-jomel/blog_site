@@ -1,10 +1,10 @@
 {% extends 'core/base.html' %}
 {% block content %}
-    <div class="container min-h ">
+    <div class="container min-h pt-4 ">
         {% if read_obj.post.all  %}
         <h3 class="mb-3">Reading List ({{read_obj.post.all.count}})</h3>
         {% for data in read_obj.post.all %}
-        <div class="post-list-container mb-3">
+        <div class="post-list-container mb-3 b-shadow">
             <div class="about-user-container mb-2">
                 <div class="prof-u">
                    

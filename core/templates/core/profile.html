@@ -1,12 +1,12 @@
 {% extends 'core/base.html' %}
 {% block content %}
-<div class="container min-h">
+<div class="container min-h pt-5">
 
 <div class="user-profile-container mb-3">
     
     {% if user.socialaccount_set.all  %}
     {% for account in user.socialaccount_set.all %}
-    <div class="profile-img-container">
+    <div class="profile-img-container b-shadow pt-4">
         <div class="profile-img-size">
             <img class="profile-img" src="{{ account.get_avatar_url }}" alt="">
         </div>
@@ -27,7 +27,9 @@
         <p>{{user.email}}</p>
     </div>
     {%endif%}
+    {% if request.user.is_authenticated %}
     <a class="edit-profile custom-nav create" href="{% url 'profile-edit' %}">Edit Profile</a>
+    {% endif %}
 </div>
 
 <div class="body-layout">
@@ -53,7 +55,7 @@
         </div>
         <div class="col-8">
             {% for list in user.post_set.all %}
-            <div class="post-list-container mb-3">
+            <div class="post-list-container mb-3 b-shadow">
                 <div class="about-user-container mb-2">
                     <div class="prof-u">
                         <img class="author-profile" src="{{ list.author.profile_img.profile.url }}" alt="">

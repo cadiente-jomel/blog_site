@@ -1,14 +1,14 @@
 {% extends 'core/base.html' %}
 {% load crispy_forms_tags %}
 {% block content %}
-<div class="container min-h">
-    <div class="m-auto p-size">
+<div class="container min-h pt-4">
+    <div class="m-auto p-size ">
 
-        <h1>Settings for <a href="">
+        <h1>Settings for <a href="{% url 'profile' request.user %}">
             @{{request.user}}
         </a></h1>
     </div>
-    <div class="container p-size p-bg">
+    <div class="container p-size p-bg b-shadow">
         <h3>User</h3>
         <form action="" method="POST" enctype="multipart/form-data">
             {% csrf_token %}

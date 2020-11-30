@@ -6,6 +6,7 @@ from PIL import Image
 from django.utils.text import slugify
 from django_editorjs import EditorJsField
 from allauth import socialaccount
+from taggit.managers import TaggableManager
 # socialaccount.providers.google.provider.OAuth2Provider.extract_extra_data
 # Create your models here.
 
@@ -40,6 +41,7 @@ class Post(models.Model):
     header = models.ImageField(upload_to='uploads', blank=True)
     snippet = models.CharField(max_length=250, blank=True)
     likes = models.ManyToManyField(User, related_name='post_likes')
+    tags = TaggableManager()
 
     def save(self, *args, **kwargs):
         if not self.id:

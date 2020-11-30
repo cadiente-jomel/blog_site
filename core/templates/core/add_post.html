@@ -13,6 +13,11 @@
                     {{forms.header}}
                 </p>
                 {{forms.title|as_crispy_field }}
+                <div class="form-group">
+                    <div>
+                        <input type="text" data-role="tagsinput"  name="tags" class="form-control created-post-tags" placeholder="Add up to 4 tags...">
+                    </div>
+                </div>
                 {{forms.snippet|as_crispy_field }}
                 <p class="p-b">Write your content post below: </p>
                 {{forms.body|as_crispy_field }}
