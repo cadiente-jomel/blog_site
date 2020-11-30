@@ -40,10 +40,11 @@ def indexPage(request):
     page_number = request.GET.get('page')
     queryset = paginator.get_page(page_number)
 
-    context['page_obj'] = queryset
-    context['common_tags'] = get_tag_list()
-    print('reading list', type(reading_obj))
-    context['reading_obj'] = reading_obj
+    context = {
+        'page_obj': queryset,
+        'common_tags': get_tag_list,
+        'reading_obj': reading_obj,
+    }
 
     return render(request, 'core/index.html', context)
 
@@ -75,9 +76,10 @@ def get_blog_queryset(query=None):  # this will be used in search
 
 
 def postDetail(request, slug):
+    curr_user = User.objects.get(username=request.user)
     post = Post.objects.get(slug=slug)
     try:
-        reading_obj = ReadingList.objects.get(post=post)
+        reading_obj = ReadingList.objects.get(user=curr_user)
     except:
         reading_obj = False
     context = {
@@ -224,7 +226,9 @@ def readingListAdd(request, slug):
             read_obj.post.add(post_obj)
             is_True = True
 
+        print('checkk', is_True)
         data = {
+            'post': post_obj.title,
             'isBookMarked': is_True
         }
 

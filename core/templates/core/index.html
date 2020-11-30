@@ -94,7 +94,6 @@
                             <div class="u-m-bottom u-readlist-container ml-auto">
 
                                 <form method="POST" action="{% url 'reading-add' p.slug%}" class="book-form">
-                                  {% csrf_token %}
                                   <button class="bookmark-btn post-book">
                                     {% if p in reading_obj.post.all %}
                                       <i class="fas fa-bookmark"></i>

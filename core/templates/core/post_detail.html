@@ -216,7 +216,6 @@
                     <div class="u-m-bottom u-readlist-container">
 
                         <form method="POST" action="{% url 'reading-add' post.slug%}" class="book-form">
-                          {% csrf_token %}
                           <button class="bookmark-btn post-book">
                             {% if post in reading_obj.post.all %}
                               <i class="fas fa-bookmark"></i>
