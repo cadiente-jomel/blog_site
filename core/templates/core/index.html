@@ -91,6 +91,7 @@
                         </a>
                         <div class="post-bottom-part">
                             <p class="post-created text-sub " id="date-c">{{p.created}}</p>
+                            {% if request.user.is_authenticated %}
                             <div class="u-m-bottom u-readlist-container ml-auto">
 
                                 <form method="POST" action="{% url 'reading-add' p.slug%}" class="book-form">
@@ -105,6 +106,7 @@
                                 </form>
         
                             </div>
+                            {% endif %}
                         </div>
                         
                       </div>

@@ -77,6 +77,12 @@ class Profile(models.Model):
         User, on_delete=models.CASCADE,  related_name='profile_img')
     profile = models.ImageField('Profile_image',
                                 default='default.jpg', upload_to='profile')
+    bio = models.CharField(max_length=50, blank=True)
+    location = models.CharField(max_length=250, blank=True)
+    following = models.ManyToManyField(
+        User, related_name='profile_following', blank=True)
+    follower = models.ManyToManyField(
+        User, related_name='profile_follower', blank=True)
 
     def __str__(self):
         return f'{self.user.username} profile'

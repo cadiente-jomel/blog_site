@@ -10,7 +10,7 @@ urlpatterns = [
     # path('login/', views.loginPage, name='login'),
     path('accounts/confirm/logout/', views.logoutConfirm, name='account_confirm'),
     path('accounts/logout/', views.logoutPage, name='account_logout'),
-    path('profile/<str:user>', views.profilePage, name='profile'),
+    path('profile/<str:user>/', views.profilePage, name='profile'),
     path('settings/', views.profileEditPage, name='profile-edit'),
     path('add-post/', views.addPost, name='add-post'),
     path('edit-post/<str:slug>/', views.editPost, name='edit-post'),
@@ -20,6 +20,8 @@ urlpatterns = [
     path('tagged/<str:slug>/', views.tagged, name='tagged'),
     path('readingList/<str:slug>/', views.readingListAdd, name='reading-add'),
     path('search/', views.searchPost, name='post-search'),
+    path('dashboard/', views.dashboard, name='dashboard'),
+    path('following/<str:user>/', views.following, name='following'),
     # since we are not using any form to upload those images we cannot set csrf token thus we need to csrf_exempt them here and we are using requires csrf token property in views
     path('fileUPload/', csrf_exempt(views.upload_file_view)),
     path('imageUPload/', csrf_exempt(views.upload_image_view)),

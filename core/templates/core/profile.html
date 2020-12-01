@@ -3,20 +3,6 @@
 <div class="container min-h pt-5">
 
 <div class="user-profile-container mb-3">
-    
-    {% if user.socialaccount_set.all  %}
-    {% for account in user.socialaccount_set.all %}
-    <div class="profile-img-container b-shadow pt-4">
-        <div class="profile-img-size">
-            <img class="profile-img" src="{{ account.get_avatar_url }}" alt="">
-        </div>
-    </div>
-    <div class="profile-info-container">
-        <h3>{{user.get_full_name}}</h3>
-        <p>{{user.email}}</p>
-    </div>
-    {% endfor %}
-    {% else %}
     <div class="profile-img-container">
         <div class="profile-img-size">
             <img class="profile-img" src="{{ user.profile_img.profile.url }}" alt="">
@@ -24,9 +10,18 @@
     </div>
     <div class="profile-info-container">
         <h3>{{user.username}}</h3>
-        <p>{{user.email}}</p>
+        <p>{{user.profile_img.bio}}</p>
     </div>
-    {%endif%}
+    <div class="profile-more-container">
+        <div class="m-auto profile-more">
+            {% if user.profile_img.location %}
+                <span class="p-2"><span class="mr-2"><i class="fas fa-map-marker-alt"></i></span>{{user.profile_img.location}}</span>
+            {% endif %}
+            <a href="mailto://{{user.email}}" class="p-2"><span class="mr-2" ><i class="fas fa-envelope"></i></span>{{user.email}}</a>
+            <span class="p-2"><span class="mr-2"><i class="fas fa-birthday-cake"></i></span>Join on {{user.date_joined.date}}</span>
+        </div>
+    </div>
+
     {% if request.user.is_authenticated %}
     <a class="edit-profile custom-nav create" href="{% url 'profile-edit' %}">Edit Profile</a>
     {% endif %}
@@ -38,6 +33,24 @@
             <div class="user-activities-container">
 
                 <ul>
+                    <li class="user-activities">
+                        <span>
+                            <i class="fas fa-user-friends"></i>
+                        </span>
+                        <form method="GET" action="{% url 'following' user.username %}" class="f-form">
+                            {% csrf_token %}
+                            <button href="#" class="open-popup-btn">1 Following</button>
+                        </form>
+                    </li>
+                    <li class="user-activities">
+                        <span>
+                            <i class="fas fa-users"></i>
+                        </span>
+                        <form method="GET" action="{% url 'following' user.username %}" class="f-form">
+                            {% csrf_token %}
+                            <button href="#" class="open-popup-btn">1 Follower</button>
+                        </form>
+                    </li>
                     <li class="user-activities"><span>
                         <i class="far fa-newspaper"></i>
                     </span>
@@ -50,6 +63,7 @@
                         <i class="fas fa-book-reader"></i>
                     </span>
                     Reading List</li>
+                    
                 </ul>
             </div>
         </div>
@@ -85,6 +99,7 @@
     </div>
 </div>
 </div>
+{% include 'core/popup.html' %}
 </div>
 <script>
     let dateContainer = document.querySelectorAll('#date-c')

@@ -3,6 +3,7 @@ from django.views.decorators.csrf import requires_csrf_token
 from django.contrib.auth import login, authenticate, logout
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import render, redirect, get_object_or_404
+from django.core import serializers
 from django.core.paginator import Paginator
 from django.contrib.auth.models import User
 from django.http import JsonResponse
@@ -11,8 +12,9 @@ from django.http import HttpResponse
 from django.contrib import messages
 from allauth import account
 from .decorators import unauthenticated_user
-from .models import Post, ReadingList
+from .models import Post, ReadingList, Profile
 from taggit.models import Tag
+import json
 # module needed in editorjs
 # Create your views here.
 
@@ -31,20 +33,46 @@ def tagged(request, slug):
     return render(request, 'core/tagged_post.html', context)
 
 
+def following(request, user):
+    curr_user = User.objects.get(username=user)
+    profile = Profile.objects.get(user=curr_user)
+    data = serializers.serialize(
+        'json', profile.following.all(), fields=('username'))
+
+    load_json = json.loads(data)
+    additional_fields = []
+    for field in profile.following.all():
+        additional_fields.append(field.profile_img.profile.url)
+    i = 0
+    for f in load_json:
+        load_json[i]['additional fields'] = additional_fields[i]
+        i += 1
+
+    # print('DATTAAA', data)
+    context = {
+        'following': load_json
+    }
+    return JsonResponse(context, safe=False)
+
+
 def indexPage(request):
-    curr_user = User.objects.get(username=request.user)
-    reading_obj = ReadingList.objects.get(user=curr_user)
     context = {}
+    if request.user.is_authenticated:
+        curr_user = User.objects.get(username=request.user)
+        try:
+            reading_obj = ReadingList.objects.get(user=curr_user)
+            context['reading_obj'] = reading_obj
+        except:
+            reading_obj = ReadingList.objects.create(user=curr_user)
+            reading_obj.save()
+
     queryset_list = Post.objects.all()
     paginator = Paginator(queryset_list, 5)
     page_number = request.GET.get('page')
     queryset = paginator.get_page(page_number)
 
-    context = {
-        'page_obj': queryset,
-        'common_tags': get_tag_list,
-        'reading_obj': reading_obj,
-    }
+    context['page_obj'] = queryset
+    context['common_tags'] = get_tag_list
 
     return render(request, 'core/index.html', context)
 
@@ -233,6 +261,10 @@ def readingListAdd(request, slug):
         }
 
         return JsonResponse(data, safe=True)
+
+
+def dashboard(request):
+    return render(request, 'core/dashboard.html')
 
 
 def addPost(request):
