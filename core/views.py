@@ -55,6 +55,29 @@ def following(request, user):
     return JsonResponse(context, safe=False)
 
 
+def followers(request, user):
+    curr_user = User.objects.get(username=user)
+    profile = Profile.objects.get(user=curr_user)
+    data = serializers.serialize(
+        'json', profile.follower.all(), fields=('username'))
+
+    load_json = json.loads(data)
+    additional_fields = []
+    print(load_json)
+    for field in profile.follower.all():
+        additional_fields.append(field.profile_img.profile.url)
+    i = 0
+    for f in load_json:
+        load_json[i]['additional fields'] = additional_fields[i]
+        i += 1
+
+    # print('DATTAAA', data)
+    context = {
+        'followers': load_json
+    }
+    return JsonResponse(context, safe=False)
+
+
 def indexPage(request):
     context = {}
     if request.user.is_authenticated:
@@ -163,11 +186,14 @@ def profilePage(request, user):
     u = User.objects.get(username=user)
     post_count = u.post_set.all().count()
     comment_count = u.comment_user.all().count()
-
+    following_count = u.profile_img.following.all().count()
+    follower_count = u.profile_img.follower.all().count()
     context = {
         'user': u,
         'post_count': post_count,
         'comment_count': comment_count,
+        'following_count': following_count,
+        'followers_count': follower_count,
     }
 
     return render(request, 'core/profile.html', context)

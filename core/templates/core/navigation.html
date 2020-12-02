@@ -28,13 +28,8 @@
       <div class="dropdown right-side">
         <a class="nav-link custom-nav create" href="{% url 'add-post' %}">Write Post</a>
         <div class="d-author-profile nav-link dropdown " role="button" data-toggle="dropdown">
-          {% if user.socialaccount_set.all %}
-          {% for account in user.socialaccount_set.all %}
-          <img src="{{ account.get_avatar_url }}" alt="user profile" class="d-author-profile-img i-author-profile" >
-          {% endfor %}
-          {% else %}
+
           <img src="{{request.user.profile_img.profile.url}}" alt="user profile" class="d-author-profile-img i-author-profile" >
-          {% endif %}
         </div>
         <div class="dropdown-menu dropdown-menu-right search-toggle" aria-labelledby="navbarDropdown">
           <a class="dropdown-item" href="{% url 'profile' request.user %}">{{ request.user.get_full_name }}

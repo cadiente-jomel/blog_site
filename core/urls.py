@@ -21,7 +21,8 @@ urlpatterns = [
     path('readingList/<str:slug>/', views.readingListAdd, name='reading-add'),
     path('search/', views.searchPost, name='post-search'),
     path('dashboard/', views.dashboard, name='dashboard'),
-    path('following/<str:user>/', views.following, name='following'),
+    path('following/<str:user>/', views.following, name='following'), path(
+        'followers/<str:user>/', views.followers, name='followers'),
     # since we are not using any form to upload those images we cannot set csrf token thus we need to csrf_exempt them here and we are using requires csrf token property in views
     path('fileUPload/', csrf_exempt(views.upload_file_view)),
     path('imageUPload/', csrf_exempt(views.upload_image_view)),
