@@ -23,6 +23,7 @@ urlpatterns = [
     path('dashboard/', views.dashboard, name='dashboard'),
     path('following/<str:user>/', views.following, name='following'), path(
         'followers/<str:user>/', views.followers, name='followers'),
+    path('follow/<str:user>/', views.followAdd, name='follow'),
     # since we are not using any form to upload those images we cannot set csrf token thus we need to csrf_exempt them here and we are using requires csrf token property in views
     path('fileUPload/', csrf_exempt(views.upload_file_view)),
     path('imageUPload/', csrf_exempt(views.upload_image_view)),

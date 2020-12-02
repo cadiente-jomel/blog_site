@@ -24,8 +24,16 @@
 
     {% if request.user.is_authenticated %}  
         {% if request.user != user %}
-        <a class="file-btn edit-profile" href="{% url 'profile-edit' %}">Following</a>  
-        {% else %}
+            {% if is_true %}
+                <a class="file-btn edit-profile follow" href="{% url 'follow' user.username %}">
+                Following
+                </a>  
+            {% else %}
+                <a class="edit-profile custom-nav create follow" href="{% url 'follow' user.username %}">
+                    Follow
+                </a>  
+            {% endif %}
+            {% else %}
         <a class="edit-profile custom-nav create" href="{% url 'profile-edit' %}">Edit Profile</a>
         {% endif %}
     {% endif %}

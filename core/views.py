@@ -78,6 +78,22 @@ def followers(request, user):
     return JsonResponse(context, safe=False)
 
 
+def followAdd(request, user):
+    curr_user = get_object_or_404(User, username=request.user)
+    target_user = get_object_or_404(User, username=user)
+
+    if target_user in curr_user.profile_img.following.all():
+        curr_user.profile_img.following.remove(target_user)
+        target_user.profile_img.follower.remove(curr_user)
+        data = 'Follow'
+    else:
+        curr_user.profile_img.following.add(target_user)
+        target_user.profile_img.follower.add(curr_user)
+        data = 'Following'
+
+    return JsonResponse({'data': data}, safe=False)
+
+
 def indexPage(request):
     context = {}
     if request.user.is_authenticated:
@@ -183,11 +199,13 @@ def logoutPage(request):
 
 
 def profilePage(request, user):
-    u = User.objects.get(username=user)
+    curr_user = get_object_or_404(User, username=request.user)
+    u = get_object_or_404(User, username=user)
     post_count = u.post_set.all().count()
     comment_count = u.comment_user.all().count()
     following_count = u.profile_img.following.all().count()
     follower_count = u.profile_img.follower.all().count()
+
     context = {
         'user': u,
         'post_count': post_count,
@@ -195,6 +213,9 @@ def profilePage(request, user):
         'following_count': following_count,
         'followers_count': follower_count,
     }
+
+    if u in curr_user.profile_img.following.all():
+        context['is_true'] = True
 
     return render(request, 'core/profile.html', context)
 
