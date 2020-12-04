@@ -1,9 +1,10 @@
 {% extends 'core/base.html' %} {% block content %}
 {% load static %}
-<div class="container pt-4">
+<div class="container pt-4 min-h">
     <div class="row">
         <div class="col-8 mr-4 pb-5 infinite-container waypoint">
             {% for p in page_obj %}
+            {% if not p.draft %}
             <div class="post-container infinite-item b-shadow">
                 <div class="post-detail">
                     <!-- about user -->
@@ -121,7 +122,7 @@
                     <!-- end of post-detail -->
                 </div>
             </div>
-
+            {% endif %}
             {% endfor %}
             {% if page_obj.has_next %}
             <a class="infinite-more-link" href="?page={{ page_obj.next_page_number }}"></a>

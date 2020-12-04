@@ -13,7 +13,7 @@ from taggit.managers import TaggableManager
 
 class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    title = models.CharField(max_length=250, )
+    title = models.CharField(max_length=250, blank=True)
     body = EditorJsField(editorjs_config={
         "tools": {
             "config": {
@@ -34,14 +34,15 @@ class Post(models.Model):
                 },
             },
         }
-    })
+    }, blank=True)
     slug = models.SlugField()
     created = models.DateTimeField(editable=False)
     modified = models.DateTimeField()
     header = models.ImageField(upload_to='uploads', blank=True)
     snippet = models.CharField(max_length=250, blank=True)
-    likes = models.ManyToManyField(User, related_name='post_likes')
-    tags = TaggableManager()
+    likes = models.ManyToManyField(User, related_name='post_likes', blank=True)
+    draft = models.BooleanField(default=False)
+    tags = TaggableManager(blank=True)
 
     def save(self, *args, **kwargs):
         if not self.id:

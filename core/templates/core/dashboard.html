@@ -1,8 +1,8 @@
 {% extends 'core/base.html' %} {% block content %}
 <div class="container min-h pt-4">
     <h1>Dashboard</h1>
-    <div class="row row-cols-2 row-cols-sm-2 row-cols-md-4">
-        <div class="col">
+    <div class="row row-cols-2  row-cols-md-4">
+        <div class="col mb-3">
             <div class="post-list-container b-shadow">
                 <div>
                     <p>1</p>
@@ -10,7 +10,7 @@
                 </div>
             </div>
         </div>
-        <div class="col">
+        <div class="col mb-3">
             <div class="post-list-container b-shadow">
                 <div>
                     <p>1</p>
@@ -18,12 +18,85 @@
                 </div>
             </div>
         </div>
-        <div class="col">
+        <div class="col mb-3">
             <div class="post-list-container b-shadow">
                 <div>
                     <p>1</p>    
                     <p>Posts</p>
                 </div>  
+            </div>
+        </div>
+
+        <div class="col mb-3">
+            <div class="post-list-container b-shadow">
+                <div>
+                    <p>5</p>    
+                    <p class="text-nowrap">Draft</p>
+                </div>  
+            </div>
+        </div>
+    </div>
+
+
+    <div class="dashboard-container">
+        <div class="dashboard-category">
+            <div class="category-container">
+                <ul class="parent-list">
+                    <li class="children-list selected-toggle">
+                        <a class="category-btn " href="{% url 'dashboard-data' 'Post' %}">
+                            Post
+                            <span class="data-count" >1</span>
+                        </a>
+                    </li>
+                    <li class="children-list">
+                        <a class="category-btn " href="{% url 'dashboard-data' 'Draft' %}">
+                            Draft
+                            <span class="data-count" >1</span>
+                        </a>
+                    <li class="children-list">
+                        <a class="category-btn " href="{% url 'dashboard-data' 'Following' %}">
+                            Following
+                            <span class="data-count" >1</span>
+                        </a>
+                    </li>
+                    <li class="children-list">
+                        <a class="category-btn " href="{% url 'dashboard-data' 'Followers' %}">
+                            Followers
+                            <span class="data-count" >1</span>
+                        </a>
+                    </li>
+                    <li class="children-list">Comments
+                        <span class="data-count" >1</span></li>
+                </ul>
+            </div>
+        </div>
+        <div class="dashboard-container-data">
+            <div class="header">
+                <h4>
+                    Posts
+                </h4>
+            </div>
+            <div class="dashboard-container-inner">
+                {% for post in posts %}
+                    <div class="dashboard-data b-shadow mb-3">
+                        <div class="data">
+                            <div class="title">
+                                <a href="{% url 'post-detail' post.slug %}">{{post.title|truncatechars:30}}</a>
+                            </div>                    
+                            <div class="draft">
+                                <a href="{% url 'post-detail' post.slug %}">Published</a>
+                            </div>
+                            <div class="controls">
+                               
+                                <input type="hidden" id="id-edit" data-url="{% url 'edit-post' post.slug %}">
+                                <input type="hidden" id="id-delete" data-url="{% url 'delete-post' post.slug %}">
+                                <input type="hidden" id="id-post" data-url="{% url 'post-detail' post.slug %}">
+                                <a class="delete" href="{% url 'delete-post' post.slug %}">Delete</a>
+                                <a class="edit" href="{% url 'edit-post' post.slug %}">Edit</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
             </div>
         </div>
     </div>

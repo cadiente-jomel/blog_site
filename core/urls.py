@@ -21,6 +21,7 @@ urlpatterns = [
     path('readingList/<str:slug>/', views.readingListAdd, name='reading-add'),
     path('search/', views.searchPost, name='post-search'),
     path('dashboard/', views.dashboard, name='dashboard'),
+    path('dashboard/<str:category>/', views.dashboardData, name='dashboard-data'),
     path('following/<str:user>/', views.following, name='following'), path(
         'followers/<str:user>/', views.followers, name='followers'),
     path('follow/<str:user>/', views.followAdd, name='follow'),

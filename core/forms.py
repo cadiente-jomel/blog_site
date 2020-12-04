@@ -33,9 +33,14 @@ class PostCreationForm(forms.ModelForm):
             'class': 'created-post-tags',
         })
 
+        self.fields['draft'].widget.attrs.update({
+            'class': 'created-post-draft',
+            'id': 'draft'
+        })
+
     class Meta:
         model = Post
-        fields = ['header', 'title', 'tags', 'snippet', 'body']
+        fields = ['header', 'title', 'tags', 'snippet', 'body', 'draft']
 
 
 class UserRegisterPage(UserCreationForm):

@@ -63,7 +63,6 @@ def followers(request, user):
 
     load_json = json.loads(data)
     additional_fields = []
-    print(load_json)
     for field in profile.follower.all():
         additional_fields.append(field.profile_img.profile.url)
     i = 0
@@ -78,7 +77,61 @@ def followers(request, user):
     return JsonResponse(context, safe=False)
 
 
+def socialStat(curr_user, fields, obj):
+    profile = Profile.objects.get(user=curr_user)
+    if obj == 'Followers':
+        data = serializers.serialize(
+            'json', profile.follower.all(), fields=fields)
+        load_json = json.loads(data)
+        additional_fields = []
+
+        for field in profile.follower.all():
+            additional_fields.append(field.profile_img.profile.url)
+        i = 0
+        for f in load_json:
+            load_json[i]['additional fields'] = additional_fields[i]
+            i += 1
+    else:
+        data = serializers.serialize(
+            'json', profile.following.all(), fields=fields)
+        load_json = json.loads(data)
+        additional_fields = []
+
+        for field in profile.following.all():
+            additional_fields.append(field.profile_img.profile.url)
+        i = 0
+        for f in load_json:
+            load_json[i]['additional fields'] = additional_fields[i]
+            i += 1
+
+    return load_json
+
+
+def dashboardData(request, category):
+    curr_user = get_object_or_404(User, username=request.user)
+    if category == 'Post':
+        data = serializers.serialize(
+            'json', curr_user.post_set.filter(draft=False), fields=('title', 'draft', 'slug'))
+    elif category == 'Draft':
+        data = serializers.serialize('json', curr_user.post_set.filter(
+            draft=True), fields=('title', 'draft', 'slug'))
+    elif category == 'Following':
+        fields = ('username')
+        data = socialStat(curr_user, fields, category)
+        # data = curr_user.profile_img.following.all()
+    elif category == 'Followers':
+        fields = ('username')
+        data = socialStat(curr_user, fields, category)
+        # data = curr_user.profile_img.follower.all()
+
+    context = {
+        'data': data
+    }
+    return JsonResponse(context, safe=False)
+
+
 def followAdd(request, user):
+
     curr_user = get_object_or_404(User, username=request.user)
     target_user = get_object_or_404(User, username=user)
 
@@ -311,7 +364,13 @@ def readingListAdd(request, slug):
 
 
 def dashboard(request):
-    return render(request, 'core/dashboard.html')
+    curr_user = User.objects.get(username=request.user)
+    post = curr_user.post_set.filter(draft=False)
+    context = {
+        'posts': post
+    }
+
+    return render(request, 'core/dashboard.html', context)
 
 
 def addPost(request):
@@ -320,8 +379,9 @@ def addPost(request):
         form = PostCreationForm(request.POST, request.FILES)
         if form.is_valid():
             obj = form.save(commit=False)
-            obj.instance.author = request.user
-            obj.save_m2m()
+            obj.author = request.user
+            obj.save()
+            form.save_m2m()
             return redirect('index')
     context = {
         'forms': form
