@@ -72,12 +72,12 @@
         </div>
         <div class="dashboard-container-data">
             <div class="header">
-                <h4>
+                <h4 class="header-title">
                     Posts
                 </h4>
             </div>
             <div class="dashboard-container-inner">
-                {% for post in posts %}
+                <!-- {% for post in posts %}
                     <div class="dashboard-data b-shadow mb-3">
                         <div class="data">
                             <div class="title">
@@ -96,7 +96,65 @@
                             </div>
                         </div>
                     </div>
-                {% endfor %}
+                {% endfor %} -->
+                <div class="social-container-outer">
+                    <div class="social-container">
+                        <div class="social-container-img">
+                            <img src="{{ request.user.profile_img.profile.url }}" alt="" class="d-author-profile-img i-author-profile mr-3">
+                            <div class="social-container-username">
+                                <div class="social-username">
+                                    @cadientejomel
+                                </div>
+                            </div>
+                        </div>
+                        <div class="social-follow-container">
+                            <button class="file-btn ">Following</button>
+                        </div>
+                    </div>
+
+                    <div class="social-container">
+                        <div class="social-container-img">
+                            <img src="{{ request.user.profile_img.profile.url }}" alt="" class="d-author-profile-img i-author-profile mr-3">
+                            <div class="social-container-username">
+                                <div class="social-username">
+                                    @cadientejomel
+                                </div>
+                            </div>
+                        </div>
+                        <div class="social-follow-container">
+                            <button class="file-btn ">Following</button>
+                        </div>
+                    </div>
+
+                    <div class="social-container">
+                        <div class="social-container-img">
+                            <img src="{{ request.user.profile_img.profile.url }}" alt="" class="d-author-profile-img i-author-profile mr-3">
+                            <div class="social-container-username">
+                                <div class="social-username">
+                                    @cadientejomel
+                                </div>
+                            </div>
+                        </div>
+                        <div class="social-follow-container">
+                            <button class="file-btn ">Following</button>
+                        </div>
+                    </div>
+
+                    <div class="social-container">
+                        <div class="social-container-img">
+                            <img src="{{ request.user.profile_img.profile.url }}" alt="" class="d-author-profile-img i-author-profile mr-3">
+                            <div class="social-container-username">
+                                <div class="social-username">
+                                    @cadientejomel
+                                </div>
+                            </div>
+                        </div>
+                        <div class="social-follow-container">
+                            <button class="file-btn ">Following</button>
+                        </div>
+                    </div>
+                    
+                </div>
             </div>
         </div>
     </div>
