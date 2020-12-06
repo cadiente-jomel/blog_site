@@ -86,11 +86,19 @@ def socialStat(curr_user, fields, obj):
         additional_fields = []
 
         for field in profile.follower.all():
-            additional_fields.append(field.profile_img.profile.url)
+            if field in profile.following.all():
+                additional_fields.append((field.profile_img.profile.url, True))
+            else:
+                # is_following = {'isFollwing': False}
+                # additional_fields.append(is_following)
+                additional_fields.append(
+                    (field.profile_img.profile.url, False))
+
         i = 0
         for f in load_json:
             load_json[i]['additional fields'] = additional_fields[i]
             i += 1
+        print(load_json)
     else:
         data = serializers.serialize(
             'json', profile.following.all(), fields=fields)
