@@ -5,7 +5,7 @@
         <div class="col mb-3">
             <div class="post-list-container b-shadow">
                 <div>
-                    <p>1</p>
+                    <p>{{ following_count }}</p>
                     <p>Following</p>
                 </div>
             </div>
@@ -13,7 +13,7 @@
         <div class="col mb-3">
             <div class="post-list-container b-shadow">
                 <div>
-                    <p>1</p>
+                    <p>{{ followers_count }}</p>
                     <p>Followers</p>
                 </div>
             </div>
@@ -21,7 +21,7 @@
         <div class="col mb-3">
             <div class="post-list-container b-shadow">
                 <div>
-                    <p>1</p>    
+                    <p>{{ posts.count }}</p>    
                     <p>Posts</p>
                 </div>  
             </div>
@@ -30,7 +30,7 @@
         <div class="col mb-3">
             <div class="post-list-container b-shadow">
                 <div>
-                    <p>5</p>    
+                    <p>{{ draft_count }}</p>    
                     <p class="text-nowrap">Draft</p>
                 </div>  
             </div>
@@ -45,25 +45,25 @@
                     <a class="category-btn " href="{% url 'dashboard-data' 'Post' %}">
                     <li class="children-list selected-toggle">
                             Post
-                            <span class="data-count" >1</span>
+                            <span class="data-count" >{{ posts.count }}</span>
                         </li>
                     </a>
                     <a class="category-btn " href="{% url 'dashboard-data' 'Draft' %}">
                     <li class="children-list">
                             Draft
-                            <span class="data-count" >1</span>
+                            <span class="data-count" >{{draft_count}}</span>
                         </li>
                     </a>
                     <a class="category-btn " href="{% url 'dashboard-data' 'Following' %}">
                     <li class="children-list">
                             Following
-                            <span class="data-count" >1</span>
+                            <span class="data-count" >{{ following_count }}</span>
                         </li>
                     </a>
                     <a class="category-btn " href="{% url 'dashboard-data' 'Followers' %}">
                     <li class="children-list">
                             Followers
-                            <span class="data-count" >1</span>
+                            <span class="data-count" >{{ followers_count }}</span>
                         </li>
                         </a>
                     <li class="children-list">Comments

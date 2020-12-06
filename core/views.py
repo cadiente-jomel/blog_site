@@ -374,8 +374,14 @@ def readingListAdd(request, slug):
 def dashboard(request):
     curr_user = User.objects.get(username=request.user)
     post = curr_user.post_set.filter(draft=False)
+    draft_count = curr_user.post_set.filter(draft=True).count()
+    following_count = curr_user.profile_img.following.all().count()
+    followers_count = curr_user.profile_img.follower.all().count()
     context = {
-        'posts': post
+        'posts': post,
+        'draft_count': draft_count,
+        'following_count': following_count,
+        'followers_count': followers_count,
     }
 
     return render(request, 'core/dashboard.html', context)
