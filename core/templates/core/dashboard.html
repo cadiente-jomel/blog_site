@@ -1,28 +1,28 @@
 {% extends 'core/base.html' %} {% block content %}
 <div class="container min-h pt-4">
     <h1>Dashboard</h1>
-    <div class="row row-cols-2  row-cols-md-4">
+    <div class="dashboard-main row row-cols-2  row-cols-md-4">
         <div class="col mb-3">
             <div class="post-list-container b-shadow">
                 <div>
-                    <p>{{ following_count }}</p>
-                    <p>Following</p>
+                    <span class="main-following-count">{{ following_count }}</span>
+                    <span>Following</span>
                 </div>
             </div>
         </div>
         <div class="col mb-3">
             <div class="post-list-container b-shadow">
                 <div>
-                    <p>{{ followers_count }}</p>
-                    <p>Followers</p>
+                    <span>{{ followers_count }}</span>
+                    <span>Followers</span>
                 </div>
             </div>
         </div>
         <div class="col mb-3">
             <div class="post-list-container b-shadow">
                 <div>
-                    <p>{{ posts.count }}</p>    
-                    <p>Posts</p>
+                    <span>{{ posts.count }}</span>    
+                    <span>Posts</span>
                 </div>  
             </div>
         </div>
@@ -30,8 +30,8 @@
         <div class="col mb-3">
             <div class="post-list-container b-shadow">
                 <div>
-                    <p>{{ draft_count }}</p>    
-                    <p class="text-nowrap">Draft</p>
+                    <span>{{ draft_count }}</span>    
+                    <span class="text-nowrap">Draft</span>
                 </div>  
             </div>
         </div>
@@ -42,32 +42,36 @@
         <div class="dashboard-category">
             <div class="category-container">
                 <ul class="parent-list">
-                    <a class="category-btn " href="{% url 'dashboard-data' 'Post' %}">
-                    <li class="children-list selected-toggle">
+                    <a class="category-btn children-list selected-toggle" href="{% url 'dashboard-data' 'Post' %}">
+                    <li class="">
                             Post
-                            <span class="data-count" >{{ posts.count }}</span>
                         </li>
+                        <span class="data-count" >{{ posts.count }}</span>
                     </a>
-                    <a class="category-btn " href="{% url 'dashboard-data' 'Draft' %}">
+                    <a class="category-btn children-list" href="{% url 'dashboard-data' 'Draft' %}">
                     <li class="children-list">
                             Draft
-                            <span class="data-count" >{{draft_count}}</span>
                         </li>
+                        <span class="data-count" >{{draft_count}}</span>
                     </a>
-                    <a class="category-btn " href="{% url 'dashboard-data' 'Following' %}">
+                    <a class="category-btn children-list" href="{% url 'dashboard-data' 'Following' %}">
                     <li class="children-list">
                             Following
-                            <span class="data-count" >{{ following_count }}</span>
                         </li>
+                        <span class="data-count following-count" >{{ following_count }}</span>
                     </a>
-                    <a class="category-btn " href="{% url 'dashboard-data' 'Followers' %}">
+                    <a class="category-btn children-list" href="{% url 'dashboard-data' 'Followers' %}">
                     <li class="children-list">
                             Followers
-                            <span class="data-count" >{{ followers_count }}</span>
                         </li>
+                        <span class="data-count" >{{ followers_count }}</span>
                         </a>
-                    <li class="children-list">Comments
-                        <span class="data-count" >1</span></li>
+                        <a class="category-btn children-list" href="{% url 'dashboard-data' 'Followers' %}">
+                            <li class="children-list">
+                                    Comments
+                                </li>
+                                <span class="data-count" >1</span>
+                                </a>
                 </ul>
             </div>
         </div>
