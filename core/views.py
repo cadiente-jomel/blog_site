@@ -12,7 +12,7 @@ from django.http import HttpResponse
 from django.contrib import messages
 from allauth import account
 from .decorators import unauthenticated_user
-from .models import Post, ReadingList, Profile
+from .models import Post, ReadingList, Profile, Comment
 from taggit.models import Tag
 import json
 # module needed in editorjs
@@ -113,6 +113,27 @@ def socialStat(curr_user, fields, obj):
             i += 1
 
     return load_json
+
+def dashboardDeleteCommentPost(request, data):
+    if request.method == 'POST':
+        post_data = json.loads(request.body.decode("utf-8"))
+        if post_data['what'] == 'post-delete':
+            Post.objects.get(slug=data).delete()
+        elif post_data['what'] == 'edit-delete':
+            dataToInt = int(data)
+            Comment.objects.get(id=dataToInt).delete()
+
+        return JsonResponse({'message': 'successfully deleted'}, safe=False)
+        # if category == 'comment':
+        #     comment = request.GET.get('comment')
+        #     Comment.objects.delete(id=comment);
+        # elif category == 'post':
+        #     post = reqeust.POST.post('post')
+        
+            
+            
+
+
 
 
 def dashboardData(request, category):
@@ -383,11 +404,13 @@ def dashboard(request):
     following_count = curr_user.profile_img.following.all().count()
     followers_count = curr_user.profile_img.follower.all().count()
     context = {
-        'posts': post,
         'draft_count': draft_count,
         'following_count': following_count,
         'followers_count': followers_count,
     }
+
+    if post:
+        context['posts'] = post
 
     return render(request, 'core/dashboard.html', context)
 
