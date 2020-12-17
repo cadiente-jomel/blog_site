@@ -83,6 +83,7 @@
         </div>
         <div class="col-8">
             {% for list in user.post_set.all %}
+            {% if not list.draft %}
             <div class="post-list-container mb-3 b-shadow">
                 <div class="about-user-container mb-2">
                     <div class="prof-u">
@@ -107,6 +108,7 @@
                     <span class="ml-1" id="date-c">{{ list.created }}</span>
                 </div>
             </div>
+            {% endif %}
                 {% endfor %}
 
         </div>

@@ -131,6 +131,11 @@ def dashboardData(request, category):
         fields = ('username')
         data = socialStat(curr_user, fields, category)
         # data = curr_user.profile_img.follower.all()
+    elif category == 'Comment':
+        slugs = [comment.post.slug for comment in curr_user.comment_user.all()]
+        # date = [d.created.time for d in curr_user.comment_user.all()]
+        
+        data = serializers.serialize('json', curr_user.comment_user.all(), fields=('post', 'created','comment',), use_natural_foreign_keys=True)
 
     context = {
         'data': data

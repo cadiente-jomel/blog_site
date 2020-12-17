@@ -11,6 +11,9 @@ from taggit.managers import TaggableManager
 # Create your models here.
 
 
+# class PersonManager(models.Manager):
+#     def get_by_natural_key(self, title):
+#         return self.get(title=title)
 class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=250, blank=True)
@@ -43,6 +46,10 @@ class Post(models.Model):
     likes = models.ManyToManyField(User, related_name='post_likes', blank=True)
     draft = models.BooleanField(default=False)
     tags = TaggableManager(blank=True)
+    # objects = PersonManager()
+
+    def natural_key(self):
+        return self.title
 
     def save(self, *args, **kwargs):
         if not self.id:
@@ -63,6 +70,9 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         return reverse('post-detail', args=[self.slug])
+    
+    class Meta:
+        unique_together = ['title']
 
 
 class ReadingList(models.Model):
@@ -97,6 +107,8 @@ class Profile(models.Model):
             img.save(self.profile.path)
 
 
+
+
 class Comment(models.Model):
     comment = models.CharField(max_length=500)
     post = models.ForeignKey(
@@ -104,7 +116,8 @@ class Comment(models.Model):
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="comment_user")
     created = models.DateTimeField()
-
+    
+   
     # def save(self, *args, **kwargs):
     #     super().save()
     #     if not self.id:
