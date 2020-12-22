@@ -82,9 +82,14 @@ def populate_profile(sociallogin, user, **kwargs):
     p.save()
 
 
+
+
 @receiver(post_save, sender=User)
 def create_profile(sender, instance, created, **kwargs):
     if not account.signals.user_logged_in:
+        if created:
+            Profile.objects.create(user=instance)
+    else:
         if created:
             Profile.objects.create(user=instance)
 
@@ -92,4 +97,6 @@ def create_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_profile(sender, instance, **kwargs):
     if not account.signals.user_logged_in:
-        instance.profile_img.save
+        instance.profile_img.save()
+    else:
+        instance.profile_img.save()

@@ -244,19 +244,19 @@ def postDetail(request, slug):
     return render(request, 'core/post_detail.html', context)
 
 
-# def registerPage(request):
-#     forms = UserRegisterPage()
+def signupPage(request):
+    forms = UserRegisterPage()
 
-#     if request.method == 'POST':
-#         forms = UserRegisterPage(request.POST)
-#         if forms.is_valid():
-#             forms.save()
-#             return redirect('login')
+    if request.method == 'POST':
+        forms = UserRegisterPage(request.POST)
+        if forms.is_valid():
+            forms.save()
+            return redirect('account_login')
 
-#     context = {
-#         'forms': forms
-#     }
-#     return render(request, 'core/register.html', context)
+    context = {
+        'form': forms
+    }
+    return render(request, 'account/signup.html', context)
 
 
 # def loginPage(request):
@@ -400,10 +400,12 @@ def readingListAdd(request, slug):
 def dashboard(request):
     curr_user = User.objects.get(username=request.user)
     post = curr_user.post_set.filter(draft=False)
+    comment_count = curr_user.comment_user.all().count()
     draft_count = curr_user.post_set.filter(draft=True).count()
     following_count = curr_user.profile_img.following.all().count()
     followers_count = curr_user.profile_img.follower.all().count()
     context = {
+        'comment_count': comment_count,
         'draft_count': draft_count,
         'following_count': following_count,
         'followers_count': followers_count,
