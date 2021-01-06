@@ -139,19 +139,29 @@
             <div class="profile-outer-home">
                 <div class="psum">
                     <div class="psum__user">
-                        <div class="profile-img-container">
-                            <div class="profile-img-size profile-img-size-home">
-                                <img class="profile-img" src="{{ request.user.profile_img.profile.url }}" alt="">
+
+                        {% if request.user.is_authenticated %}
+                            <div class="profile-img-container">
+                                <div class="profile-img-size profile-img-size-home">
+                                    <img class="profile-img" src="{{ request.user.profile_img.profile.url }}" alt="">
+                                </div>
                             </div>
-                        </div>
     <!--                    <div class="imgcontainer">-->
     <!--                        <img src="" alt="user_profile" class="imgcontainer__img">-->
     <!--                    </div>-->
                         <div class="usercontainer">
                             <h5>@{{request.user}}</h5>
                         </div>
+                        {% endif %}
                         <div class="writecon">
-                             <a class="nav-link custom-nav create" href="{% url 'add-post' %}">Write Post</a>
+                            {% if not request.user.is_authenticated%}
+                                <p style="text-align: left; font-weight: 700; font-size: 1.3rem;">Welcome to the community of friendly and amazing developers</p>
+                                <p style="text-align: left;">a place where developer gather, share ideas and stay up-to-date.</p>
+                                <a class="nav-link custom-nav create unauth-create mb-2" href="{% url 'account_signup' %}">Create Account</a>
+                                <a class="nav-link custom-nav login" href="{% url 'account_login' %}">Log in</a>
+                            {% else %}
+                                <a class="nav-link custom-nav create" href="{% url 'add-post' %}">Write Post</a>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

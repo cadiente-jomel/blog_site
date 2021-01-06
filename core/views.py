@@ -184,7 +184,9 @@ def followAdd(request, user):
 def indexPage(request):
     context = {}
     if request.user.is_authenticated:
+
         curr_user = User.objects.get(username=request.user)
+        context['curr_user'] = curr_user.post_set.all()[:5]
         try:
             reading_obj = ReadingList.objects.get(user=curr_user)
             context['reading_obj'] = reading_obj
@@ -197,7 +199,6 @@ def indexPage(request):
     page_number = request.GET.get('page')
     queryset = paginator.get_page(page_number)
 
-    context['curr_user'] = curr_user.post_set.all()[:5]
     context['page_obj'] = queryset
     context['common_tags'] = get_tag_list
 
@@ -231,17 +232,19 @@ def get_blog_queryset(query=None):  # this will be used in search
 
 
 def postDetail(request, slug):
-    curr_user = User.objects.get(username=request.user)
-    post = Post.objects.get(slug=slug)
-    try:
-        reading_obj = ReadingList.objects.get(user=curr_user)
-    except:
-        reading_obj = False
-    context = {
-        'reading_obj': reading_obj,
-        'post': post
-    }
+    context = {}
+    if request.user.is_authenticated:
+        curr_user = User.objects.get(username=request.user)
 
+        try:
+            reading_obj = ReadingList.objects.get(user=curr_user)
+        except:
+            reading_obj = False
+
+        context['reading_obj'] =  reading_obj
+
+    post = Post.objects.get(slug=slug)
+    context['post'] = post
     return render(request, 'core/post_detail.html', context)
 
 
