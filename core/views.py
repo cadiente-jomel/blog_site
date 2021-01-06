@@ -197,6 +197,7 @@ def indexPage(request):
     page_number = request.GET.get('page')
     queryset = paginator.get_page(page_number)
 
+    context['curr_user'] = curr_user.post_set.all()[:5]
     context['page_obj'] = queryset
     context['common_tags'] = get_tag_list
 
