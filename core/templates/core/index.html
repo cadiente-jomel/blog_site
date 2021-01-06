@@ -82,9 +82,9 @@
                           <p class="post-title">
                               {{p.title}}
                           </p>
-                        <div class="list-tag">
+                        <div class="list-tag mb-3">
                             {% for tag in p.tags.all %}
-                              <a href="{% url 'tagged' tag.slug %}"><span>#</span>{{tag}}</a>
+                              <a  href="{% url 'tagged' tag.slug %}"><span>#</span>{{tag}}</a>
                             {% endfor %}
                         </div>
       
@@ -162,12 +162,34 @@
                 <div class="recent-post">
                     {% if curr_user %}
                         {% for post in curr_user %}
-                            <div class="recent-post__title">
-                                <a href="{% url 'post-detail' post.slug %}">{{post.title}}</a>
-                            </div>
+                            {%if not post.draft %}
+                                <div class="recent-post__title">
+                                    <a href="{% url 'post-detail' post.slug %}">{{post.title}}</a>
+                                </div>
+                            {% endif %}
                         {% endfor %}
                     {% else %}
                         <p class="recent-post__title" style="text-align: center;">You haven't post anything yet</p>
+                    {% endif %}
+                </div>
+            </div>
+
+             <div class="recent-post-container mt-3">
+                <div class="recent-header">
+                    <span class="recent-text">Draft</span>
+                    <a href="{% url 'dashboard' %}">View all</a>
+                </div>
+                <div class="recent-post">
+                    {% if curr_user %}
+                        {% for post in curr_user %}
+                            {% if post.draft %}
+                                <div class="recent-post__title">
+                                    <a href="{% url 'edit-post' post.slug %}">{{post.title}}</a>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <p class="recent-post__title" style="text-align: center;">Draft is empty</p>
                     {% endif %}
                 </div>
             </div>
