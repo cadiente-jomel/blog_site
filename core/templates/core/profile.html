@@ -45,7 +45,6 @@
             <div class="user-activities-container">
 
                 <ul>
-                    {% if request.user == user %}
                     <li class="user-activities">
                         <span>
                             <i class="fas fa-user-friends"></i>
@@ -64,7 +63,6 @@
                             <button href="#" class="open-popup-btn">{{followers_count}} Follower</button>
                         </form>
                     </li>
-                    {% endif %}
                     <li class="user-activities"><span>
                         <i class="far fa-newspaper"></i>
                     </span>

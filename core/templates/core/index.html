@@ -152,7 +152,7 @@
                         <div class="usercontainer">
                             <h5>@{{request.user}}</h5>
                         </div>
-                        {% endif %}
+                        {% else %}
                         <div class="writecon">
                             {% if not request.user.is_authenticated%}
                                 <p style="text-align: left; font-weight: 700; font-size: 1.3rem;">Welcome to the community of friendly and amazing developers</p>
@@ -163,46 +163,83 @@
                                 <a class="nav-link custom-nav create" href="{% url 'add-post' %}">Write Post</a>
                             {% endif %}
                         </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
+            {% if request.user.is_authenticated %}
+                <div class="recent-post-container mt-3">
+                    <div class="recent-header">
+                        <span class="recent-text">Recent Post</span>
+                        <a href="{% url 'dashboard' %}">View all</a>
+                    </div>
+                    <div class="recent-post">
+                        {% if curr_user %}
+                            {% for post in curr_user %}
+                                {%if not post.draft %}
+                                    <div class="recent-post__title">
+                                        <a href="{% url 'post-detail' post.slug %}">{{post.title}}</a>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            <p class="recent-post__title" style="text-align: center;">You haven't post anything yet</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="recent-post-container mt-3">
+                    <div class="recent-header">
+                        <span class="recent-text">Draft</span>
+                        <a href="{% url 'dashboard' %}">View all</a>
+                    </div>
+                    <div class="recent-post">
+                        {% if curr_user %}
+                            {% for post in curr_user %}
+                                {% if post.draft %}
+                                    <div class="recent-post__title">
+                                        <a href="{% url 'edit-post' post.slug %}">{{post.title}}</a>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            <p class="recent-post__title" style="text-align: center;">Draft is empty</p>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
             <div class="recent-post-container mt-3">
                 <div class="recent-header">
-                    <span class="recent-text">Recent Post</span>
-                    <a href="{% url 'dashboard' %}">View all</a>
+                    <span class="recent-text">Most Followed</span>
                 </div>
                 <div class="recent-post">
-                    {% if curr_user %}
-                        {% for post in curr_user %}
-                            {%if not post.draft %}
-                                <div class="recent-post__title">
-                                    <a href="{% url 'post-detail' post.slug %}">{{post.title}}</a>
+                        {% for author in most_followed %}
+                            <div class="recent-post__title">
+                                <div class="most-user-container">
+                                    <img class="author-profile" 
+                                        src="{{ author.profile.url }}"
+                                        alt=""
+                                    />
+                                        <a href="{% url 'profile' author.user.username %}">{{author.user.username}}</a>
                                 </div>
-                            {% endif %}
+
+                                <span>{{ author.follower.all.count }}</span>
+                            </div>
                         {% endfor %}
-                    {% else %}
-                        <p class="recent-post__title" style="text-align: center;">You haven't post anything yet</p>
-                    {% endif %}
+
                 </div>
             </div>
 
-             <div class="recent-post-container mt-3">
+            <div class="recent-post-container mt-3">
                 <div class="recent-header">
-                    <span class="recent-text">Draft</span>
-                    <a href="{% url 'dashboard' %}">View all</a>
+                    <span class="recent-text">Most Liked Post</span>
                 </div>
                 <div class="recent-post">
-                    {% if curr_user %}
-                        {% for post in curr_user %}
-                            {% if post.draft %}
-                                <div class="recent-post__title">
-                                    <a href="{% url 'edit-post' post.slug %}">{{post.title}}</a>
-                                </div>
-                            {% endif %}
-                        {% endfor %}
-                    {% else %}
-                        <p class="recent-post__title" style="text-align: center;">Draft is empty</p>
-                    {% endif %}
+                    {% for post_likes in most_liked %}
+                        <div class="recent-post__title">
+                            <a href="{% url 'post-detail' post_likes.slug %}">{{post_likes.title}}</a>
+                        </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>

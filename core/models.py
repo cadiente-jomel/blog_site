@@ -70,8 +70,9 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         return reverse('post-detail', args=[self.slug])
-    
+
     class Meta:
+        ordering = ['-created']
         unique_together = ['title']
 
 
@@ -107,8 +108,6 @@ class Profile(models.Model):
             img.save(self.profile.path)
 
 
-
-
 class Comment(models.Model):
     comment = models.CharField(max_length=500)
     post = models.ForeignKey(
@@ -116,8 +115,7 @@ class Comment(models.Model):
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="comment_user")
     created = models.DateTimeField()
-    
-   
+
     # def save(self, *args, **kwargs):
     #     super().save()
     #     if not self.id:

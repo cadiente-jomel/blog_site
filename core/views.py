@@ -6,6 +6,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.core import serializers
 from django.core.paginator import Paginator
 from django.contrib.auth.models import User
+from django.db.models import Count
 from django.http import JsonResponse
 from django.db.models import Q
 from django.http import HttpResponse
@@ -114,6 +115,7 @@ def socialStat(curr_user, fields, obj):
 
     return load_json
 
+
 def dashboardDeleteCommentPost(request, data):
     if request.method == 'POST':
         post_data = json.loads(request.body.decode("utf-8"))
@@ -129,11 +131,6 @@ def dashboardDeleteCommentPost(request, data):
         #     Comment.objects.delete(id=comment);
         # elif category == 'post':
         #     post = reqeust.POST.post('post')
-        
-            
-            
-
-
 
 
 def dashboardData(request, category):
@@ -155,8 +152,9 @@ def dashboardData(request, category):
     elif category == 'Comment':
         slugs = [comment.post.slug for comment in curr_user.comment_user.all()]
         # date = [d.created.time for d in curr_user.comment_user.all()]
-        
-        data = serializers.serialize('json', curr_user.comment_user.all(), fields=('post', 'created','comment',), use_natural_foreign_keys=True)
+
+        data = serializers.serialize('json', curr_user.comment_user.all(), fields=(
+            'post', 'created', 'comment',), use_natural_foreign_keys=True)
 
     context = {
         'data': data
@@ -193,8 +191,13 @@ def indexPage(request):
         except:
             reading_obj = ReadingList.objects.create(user=curr_user)
             reading_obj.save()
-
+    most_followed = Profile.objects.annotate(
+        Count('follower')).order_by('-follower__count')[:5]
+    context['most_followed'] = most_followed
     queryset_list = Post.objects.all()
+    most_liked = Post.objects.annotate(
+        Count('likes')).order_by('-likes__count')
+    context['most_liked'] = most_liked
     paginator = Paginator(queryset_list, 5)
     page_number = request.GET.get('page')
     queryset = paginator.get_page(page_number)
@@ -241,7 +244,7 @@ def postDetail(request, slug):
         except:
             reading_obj = False
 
-        context['reading_obj'] =  reading_obj
+        context['reading_obj'] = reading_obj
 
     post = Post.objects.get(slug=slug)
     context['post'] = post
@@ -290,7 +293,6 @@ def logoutPage(request):
 
 
 def profilePage(request, user):
-    curr_user = get_object_or_404(User, username=request.user)
     u = get_object_or_404(User, username=user)
     post_count = u.post_set.all().count()
     comment_count = u.comment_user.all().count()
@@ -304,9 +306,10 @@ def profilePage(request, user):
         'following_count': following_count,
         'followers_count': follower_count,
     }
-
-    if u in curr_user.profile_img.following.all():
-        context['is_true'] = True
+    if request.user.is_authenticated:
+        curr_user = get_object_or_404(User, username=request.user)
+        if u in curr_user.profile_img.following.all():
+            context['is_true'] = True
 
     return render(request, 'core/profile.html', context)
 
