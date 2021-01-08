@@ -152,6 +152,7 @@
                         <div class="usercontainer">
                             <h5>@{{request.user}}</h5>
                         </div>
+                        <a class="nav-link custom-nav create" href="{% url 'add-post' %}">Write Post</a>
                         {% else %}
                         <div class="writecon">
                             {% if not request.user.is_authenticated%}
@@ -160,7 +161,7 @@
                                 <a class="nav-link custom-nav create unauth-create mb-2" href="{% url 'account_signup' %}">Create Account</a>
                                 <a class="nav-link custom-nav login" href="{% url 'account_login' %}">Log in</a>
                             {% else %}
-                                <a class="nav-link custom-nav create" href="{% url 'add-post' %}">Write Post</a>
+                                
                             {% endif %}
                         </div>
                         {% endif %}
@@ -236,9 +237,11 @@
                 </div>
                 <div class="recent-post">
                     {% for post_likes in most_liked %}
+                        {% if not post_likes.draft %}
                         <div class="recent-post__title">
                             <a href="{% url 'post-detail' post_likes.slug %}">{{post_likes.title}}</a>
                         </div>
+                        {% endif %}
                     {% endfor %}
                 </div>
             </div>
