@@ -220,18 +220,18 @@ def searchPost(request):
 
 
 def get_blog_queryset(query=None):  # this will be used in search
+    query = query.strip()
     queries = query.split(' ')
-    for q in queries:
-        posts = Post.objects.filter(
-            Q(title__icontains=q),
-            Q(body__icontains=q),
-            Q(snippet__icontains=q),
-        ).distinct()
-    print('found posts', posts)
-    queryset = [post for post in posts]
-    print('queryset to be pass', queryset)
-
-    return list(set(queryset))
+    posts = Post.objects.all()
+    q = Q()
+    for keyword in queries:
+        q = q | Q(title__icontains=keyword) | Q(
+            body__icontains=keyword) | Q(snippet__icontains=keyword)
+    results = posts.filter(q).exclude(draft=True)
+    try:
+        return list(set(results))
+    except:
+        return None
 
 
 def postDetail(request, slug):

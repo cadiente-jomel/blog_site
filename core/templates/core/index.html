@@ -152,7 +152,8 @@
                         <div class="usercontainer">
                             <h5>@{{request.user}}</h5>
                         </div>
-                        <a class="nav-link custom-nav create" href="{% url 'add-post' %}">Write Post</a>
+                        <a class="nav-link custom-nav unauth-create create mb-2" href="{% url 'add-post' %}">Write Post</a>
+                        <a class="nav-link custom-nav login" href="{% url 'profile' request.user %}">View Profile</a>
                         {% else %}
                         <div class="writecon">
                             {% if not request.user.is_authenticated%}
