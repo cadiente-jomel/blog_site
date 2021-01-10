@@ -88,7 +88,7 @@ class Profile(models.Model):
     user = models.OneToOneField(
         User, on_delete=models.CASCADE,  related_name='profile_img')
     profile = models.ImageField('Profile_image',
-                                default='default.jpg', upload_to='profile')
+                                default='/profile/default.jpg', upload_to='profile')
     bio = models.CharField(max_length=50, blank=True)
     location = models.CharField(max_length=250, blank=True)
     following = models.ManyToManyField(
