@@ -196,7 +196,7 @@ def indexPage(request):
     context['most_followed'] = most_followed
     queryset_list = Post.objects.all()
     most_liked = Post.objects.annotate(
-        Count('likes')).order_by('-likes__count')
+        Count('likes')).filter(likes__count__gt=0).order_by('-likes__count')[:5]
     context['most_liked'] = most_liked
     paginator = Paginator(queryset_list, 5)
     page_number = request.GET.get('page')
