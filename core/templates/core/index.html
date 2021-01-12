@@ -210,11 +210,13 @@
                     </div>
                 </div>
             {% endif %}
+            
             <div class="recent-post-container mt-3">
                 <div class="recent-header">
                     <span class="recent-text">Most Followed</span>
                 </div>
                 <div class="recent-post">
+                    {% if most_followed %}
                         {% for author in most_followed %}
                             <div class="recent-post__title">
                                 <div class="most-user-container">
@@ -229,14 +231,20 @@
                             </div>
                         {% endfor %}
 
+                    {% else %}
+                    <div class="recent-post__title">Be the first one to climb up the ladder</div>
+                    {% endif %}
                 </div>
+
             </div>
+            
 
             <div class="recent-post-container mt-3">
                 <div class="recent-header">
                     <span class="recent-text">Most Liked Post</span>
                 </div>
                 <div class="recent-post">
+                    {% if most_liked %}
                     {% for post_likes in most_liked %}
                         {% if not post_likes.draft %}
                         <div class="recent-post__title">
@@ -244,6 +252,9 @@
                         </div>
                         {% endif %}
                     {% endfor %}
+                    {% else %}
+                    <div class="recent-post__title">Be the first to share your ideas</div>
+                    {% endif %}
                 </div>
             </div>
         </div>

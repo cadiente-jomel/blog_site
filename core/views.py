@@ -192,7 +192,7 @@ def indexPage(request):
             reading_obj = ReadingList.objects.create(user=curr_user)
             reading_obj.save()
     most_followed = Profile.objects.annotate(
-        Count('follower')).order_by('-follower__count')[:5]
+        Count('follower')).filter(follower__count__gt=0).order_by('-follower__count')[:5]
     context['most_followed'] = most_followed
     queryset_list = Post.objects.all()
     most_liked = Post.objects.annotate(
